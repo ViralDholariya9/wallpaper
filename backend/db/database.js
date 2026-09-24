@@ -1736,16 +1736,30 @@ async function initSchema() {
     console.log('📊 Initialized 14-day daily analytics baseline dataset');
   }
 
-  // Seed default admin account if none exists (admin / admin123)
-  const existingAdmin = await db.getAsync('SELECT id FROM admins LIMIT 1');
+  // Seed or update admin account from environment variables or defaults
+  const targetUsername = process.env.ADMIN_USERNAME || 'codefixer';
+  const targetPassword = process.env.ADMIN_PASSWORD || 'Dvir@@0411';
+
+  const existingAdmin = await db.getAsync('SELECT id, username, passwordHash, salt FROM admins LIMIT 1');
   if (!existingAdmin) {
     const salt = generateSalt();
-    const hash = hashPassword('admin123', salt);
+    const hash = hashPassword(targetPassword, salt);
     await db.runAsync(
       'INSERT INTO admins (id, username, passwordHash, salt, role, createdAt) VALUES (?, ?, ?, ?, ?, ?)',
-      ['admin_default', 'admin', hash, salt, 'superadmin', Date.now()]
+      ['admin_default', targetUsername, hash, salt, 'superadmin', Date.now()]
     );
-    console.log('🔒 Default Admin user initialized: [username: admin | password: admin123]');
+    console.log(`🔒 Admin user initialized: [username: ${targetUsername}]`);
+  } else {
+    const isMatching = existingAdmin.username === targetUsername && verifyPassword(targetPassword, existingAdmin.passwordHash, existingAdmin.salt);
+    if (!isMatching) {
+      const salt = generateSalt();
+      const hash = hashPassword(targetPassword, salt);
+      await db.runAsync(
+        'UPDATE admins SET username = ?, passwordHash = ?, salt = ? WHERE id = ?',
+        [targetUsername, hash, salt, existingAdmin.id]
+      );
+      console.log(`🔒 Admin credentials synchronized: [username: ${targetUsername}]`);
+    }
   }
 }
 
