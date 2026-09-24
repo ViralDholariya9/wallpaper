@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="pantherBg" cx="50%" cy="40%" r="75%">
+          <stop offset="0%" stop-color="#0c0517"/>
+          <stop offset="50%" stop-color="#05010a"/>
+          <stop offset="100%" stop-color="#010003"/>
+        </radialGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#pantherBg)"/>
+      <!-- Stealth Shadow Panther Silhouette blending into darkness -->
+      <path d="M180 180 L130 140 L140 190 L110 220 L150 240 L180 270 L210 240 L250 220 L220 190 L230 140 Z" fill="#120722" stroke="#4A148C" stroke-width="2"/>
+      <!-- Stealth Slit Eyes (Dark Amethyst) -->
+      <polygon points="155,215 168,220 162,225" fill="#7C4DFF" opacity="0.85"/>
+      <polygon points="205,215 192,220 198,225" fill="#7C4DFF" opacity="0.85"/>
+      <!-- Subtle Shadow Halo -->
+      <circle cx="180" cy="220" r="110" fill="none" stroke="#311B92" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.3"/>
+    </svg>

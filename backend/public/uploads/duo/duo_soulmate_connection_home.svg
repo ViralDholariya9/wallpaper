@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="sunSky" cx="50%" cy="42%" r="85%">
+          <stop offset="0%" stop-color="#3A1505"/>
+          <stop offset="45%" stop-color="#190600"/>
+          <stop offset="100%" stop-color="#050100"/>
+        </radialGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#sunSky)"/>
+      <!-- Radiant Sun (Right Half of Connection, Connecting with Golden Heart Flare) -->
+      <circle cx="150" cy="250" r="85" fill="#FF6F00" opacity="0.3"/>
+      <circle cx="150" cy="250" r="70" fill="#FFAB00" opacity="0.75"/>
+      <circle cx="150" cy="250" r="55" fill="#FFF8E1"/>
+      <!-- Sun King Profile Silhouette Reaching Back -->
+      <path d="M240 340 C240 280 210 250 180 250 C170 250 160 255 155 265 C170 280 175 310 165 340 Z" fill="#2E1103" stroke="#FFD54F" stroke-width="2"/>
+      <!-- Reaching Hand Towards Center Connection -->
+      <path d="M190 350 Q150 330 110 320" fill="none" stroke="#FFD54F" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="110" cy="320" r="5" fill="#FFD54F"/>
+      <!-- Interlocking Cosmic Heart Flare in Center -->
+      <path d="M180 300 C180 290 170 280 160 280 C145 280 140 295 140 305 C140 325 180 350 180 350 C180 350 220 325 220 305 C220 295 215 280 200 280 C190 280 180 290 180 300 Z" fill="#FF1744" stroke="#FFF" stroke-width="2"/>
+      <!-- Cosmic Flare Sparks -->
+      <circle cx="180" cy="315" r="4" fill="#FFF"/>
+      <circle cx="280" cy="140" r="3" fill="#FFAB00"/>
+      <circle cx="90" cy="160" r="2.5" fill="#FFD54F"/>
+    </svg>

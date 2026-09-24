@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="21.6"
+        android:translateY="21.6">
+        <!-- Back Layer (Parallax depth 1) -->
+        <path
+            android:fillColor="#3D3070"
+            android:pathData="M24,24 L84,24 A12,12 0 0,1 96,36 L96,84 A12,12 0 0,1 84,96 L24,96 A12,12 0 0,1 12,84 L12,36 A12,12 0 0,1 24,24 Z" />
+        <!-- Middle Layer (Parallax depth 2) -->
+        <path
+            android:fillColor="#7C4DFF"
+            android:pathData="M30,18 L90,18 A12,12 0 0,1 102,30 L102,78 A12,12 0 0,1 90,90 L30,90 A12,12 0 0,1 18,78 L18,30 A12,12 0 0,1 30,18 Z" />
+        <!-- Front Layer (Parallax depth 3) -->
+        <path
+            android:fillColor="#00E5FF"
+            android:pathData="M36,12 L96,12 A12,12 0 0,1 108,24 L108,72 A12,12 0 0,1 96,84 L36,84 A12,12 0 0,1 24,72 L24,24 A12,12 0 0,1 36,12 Z" />
+        <!-- Icon sparkle -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M66,36 L70,44 L78,48 L70,52 L66,60 L62,52 L54,48 L62,44 Z" />
+    </group>
+</vector>

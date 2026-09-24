@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="cyberBg" cx="50%" cy="38%" r="75%">
+          <stop offset="0%" stop-color="#190d38"/>
+          <stop offset="45%" stop-color="#090317"/>
+          <stop offset="100%" stop-color="#020005"/>
+        </radialGradient>
+        <linearGradient id="cyberGrid" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#7000FF" stop-opacity="0.08"/>
+        </linearGradient>
+        <linearGradient id="cyberBeam" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.8"/>
+          <stop offset="50%" stop-color="#7000FF" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- Background -->
+      <rect width="360" height="640" fill="url(#cyberBg)"/>
+      <!-- Perspective Cyber Grid -->
+      <g stroke="url(#cyberGrid)" stroke-width="1">
+        <line x1="0" y1="120" x2="360" y2="120"/>
+        <line x1="0" y1="240" x2="360" y2="240"/>
+        <line x1="0" y1="360" x2="360" y2="360"/>
+        <line x1="0" y1="480" x2="360" y2="480"/>
+        <line x1="60" y1="0" x2="60" y2="640"/>
+        <line x1="120" y1="0" x2="120" y2="640"/>
+        <line x1="180" y1="0" x2="180" y2="640"/>
+        <line x1="240" y1="0" x2="240" y2="640"/>
+        <line x1="300" y1="0" x2="300" y2="640"/>
+      </g>
+      <!-- Holographic Hex Core Reticle -->
+      <circle cx="180" cy="200" r="115" fill="none" stroke="#7000FF" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.45"/>
+      <circle cx="180" cy="200" r="95" fill="none" stroke="#00E5FF" stroke-width="2" stroke-dasharray="16 8" opacity="0.6"/>
+      <circle cx="180" cy="200" r="75" fill="none" stroke="#00E5FF" stroke-width="1" opacity="0.3"/>
+      <!-- Hexagons -->
+      <polygon points="180,145 228,172 228,228 180,255 132,228 132,172" fill="none" stroke="#00E5FF" stroke-width="2" opacity="0.5"/>
+      <polygon points="180,160 215,180 215,220 180,240 145,220 145,180" fill="#0c0720" stroke="#7000FF" stroke-width="2.5" opacity="0.7"/>
+      <!-- Cyber Circuit Tech Marks -->
+      <path d="M40 200 L110 200 L125 185" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity="0.5"/>
+      <path d="M320 200 L250 200 L235 215" fill="none" stroke="#7000FF" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="40" cy="200" r="3" fill="#00E5FF"/>
+      <circle cx="320" cy="200" r="3" fill="#7000FF"/>
+      <!-- Matrix Data Beams in lower half -->
+      <rect x="75" y="420" width="4" height="90" fill="url(#cyberBeam)" opacity="0.7" rx="2"/>
+      <rect x="145" y="380" width="3" height="120" fill="url(#cyberBeam)" opacity="0.5" rx="1.5"/>
+      <rect x="215" y="440" width="3" height="80" fill="url(#cyberBeam)" opacity="0.6" rx="1.5"/>
+      <rect x="280" y="400" width="4" height="110" fill="url(#cyberBeam)" opacity="0.75" rx="2"/>
+    </svg>

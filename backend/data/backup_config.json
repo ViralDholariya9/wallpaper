@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "frequency": "daily",
+  "retentionMaxSnapshots": 14,
+  "lastAutoBackupAt": 1790162023662,
+  "nextAutoBackupAt": 1790248423834
+}

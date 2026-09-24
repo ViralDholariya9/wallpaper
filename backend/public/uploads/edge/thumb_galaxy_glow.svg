@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 360" width="200" height="360">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4A00E0"/>
+      <stop offset="50%" stop-color="#8E2DE2"/>
+      <stop offset="100%" stop-color="#00C9FF"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="200" height="360" rx="28" fill="#0c0e17" />
+  <rect x="8" y="8" width="184" height="344" rx="22" fill="none" stroke="url(#grad)" stroke-width="6" filter="url(#glow)" />
+  <rect x="16" y="16" width="168" height="328" rx="16" fill="#08090f" />
+  
+  <text x="100" y="180" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">GALAXY DRIFT</text>
+  <text x="100" y="202" fill="rgba(255,255,255,0.6)" font-size="10" font-family="sans-serif" text-anchor="middle">EDGE GLOW PRESET</text>
+</svg>

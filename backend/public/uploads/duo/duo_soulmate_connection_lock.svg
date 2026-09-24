@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <linearGradient id="moonSky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#050B1A"/>
+          <stop offset="50%" stop-color="#0B1A3A"/>
+          <stop offset="100%" stop-color="#02050D"/>
+        </linearGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#moonSky)"/>
+      <!-- Crescent Moon (Left Half of Soulmates Connection) -->
+      <path d="M210 160 A90 90 0 1 0 210 340 A70 70 0 1 1 210 160 Z" fill="#80D8FF" opacity="0.85"/>
+      <circle cx="210" cy="250" r="95" fill="none" stroke="#00E5FF" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.4"/>
+      <!-- Starry Constellations on Lock -->
+      <circle cx="80" cy="140" r="2" fill="#FFF"/>
+      <circle cx="130" cy="110" r="2.5" fill="#80D8FF"/>
+      <circle cx="90" cy="220" r="2" fill="#FFF"/>
+      <line x1="80" y1="140" x2="130" y2="110" stroke="#80D8FF" stroke-width="1" opacity="0.5"/>
+      <line x1="80" y1="140" x2="90" y2="220" stroke="#80D8FF" stroke-width="1" opacity="0.5"/>
+      <!-- Moon Maiden Profile Silhouette -->
+      <path d="M120 340 C120 280 150 250 180 250 C190 250 200 255 205 265 C190 280 185 310 195 340 Z" fill="#0C1B38" stroke="#80D8FF" stroke-width="2"/>
+      <!-- Reaching Hand Towards Right -->
+      <path d="M170 350 Q210 330 250 320" fill="none" stroke="#00E5FF" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="250" cy="320" r="5" fill="#00E5FF"/>
+    </svg>

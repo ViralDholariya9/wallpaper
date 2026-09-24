@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="tigerBg" cx="50%" cy="40%" r="85%">
+          <stop offset="0%" stop-color="#2d0042"/>
+          <stop offset="45%" stop-color="#12001c"/>
+          <stop offset="100%" stop-color="#030005"/>
+        </radialGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#tigerBg)"/>
+      <!-- AWAKENED CYBER NEON TIGER with Electric Fangs & Glowing Stripes -->
+      <circle cx="180" cy="220" r="130" fill="none" stroke="#FF007F" stroke-width="2" stroke-dasharray="14 8" opacity="0.5"/>
+      <circle cx="180" cy="220" r="105" fill="none" stroke="#00E5FF" stroke-width="2.5" opacity="0.75"/>
+      <!-- Geometric Tiger Head -->
+      <polygon points="180,170 120,130 135,185 95,220 145,245 180,290 215,245 265,220 225,185 240,130 Z" fill="#1b0028" stroke="#00E5FF" stroke-width="3"/>
+      <!-- Glowing Electric Cyan Eyes -->
+      <polygon points="152,210 168,218 160,226" fill="#00E5FF"/>
+      <circle cx="160" cy="218" r="2" fill="#FFF"/>
+      <polygon points="208,210 192,218 200,226" fill="#00E5FF"/>
+      <circle cx="200" cy="218" r="2" fill="#FFF"/>
+      <!-- Neon Magenta Tiger Stripes -->
+      <path d="M180 185 L180 205 M170 190 L160 200 M190 190 L200 200" stroke="#FF007F" stroke-width="3" stroke-linecap="round"/>
+      <path d="M125 210 L145 220 M120 230 L140 235" stroke="#FF007F" stroke-width="3" stroke-linecap="round"/>
+      <path d="M235 210 L215 220 M240 230 L220 235" stroke="#FF007F" stroke-width="3" stroke-linecap="round"/>
+      <!-- Electric Fangs -->
+      <polygon points="168,255 174,272 176,255" fill="#FFF" stroke="#00E5FF" stroke-width="1"/>
+      <polygon points="192,255 186,272 184,255" fill="#FFF" stroke="#00E5FF" stroke-width="1"/>
+      <!-- Energy sparks -->
+      <circle cx="80" cy="180" r="3" fill="#00E5FF"/>
+      <circle cx="280" cy="160" r="3" fill="#FF007F"/>
+      <circle cx="180" cy="100" r="3.5" fill="#00E5FF"/>
+    </svg>

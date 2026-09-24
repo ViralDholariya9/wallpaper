@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.parallax.wallpaper.app-mergeReleaseResources-53:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\VP\\.gradle\\caches\\8.13\\transforms\\cfd7d6d49dbb70a4e68a8c20a145b448\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}

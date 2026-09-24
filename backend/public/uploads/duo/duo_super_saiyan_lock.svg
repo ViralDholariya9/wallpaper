@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="saiyanBgLock" cx="50%" cy="40%" r="75%">
+          <stop offset="0%" stop-color="#1A1202"/>
+          <stop offset="45%" stop-color="#0A0601"/>
+          <stop offset="100%" stop-color="#020100"/>
+        </radialGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#saiyanBgLock)"/>
+      <!-- Calm Silhouette & Base Form Hair Spikes -->
+      <polygon points="180,120 160,160 140,140 145,190 120,180 135,220 180,210 225,220 240,180 215,190 220,140 200,160" fill="#1F1505" stroke="#FF9800" stroke-width="1.8"/>
+      <!-- Focused Head & Jaw -->
+      <path d="M165 200 L180 230 L195 200 Z" fill="#2E1C05" stroke="#FF9800" stroke-width="1.5"/>
+      <!-- Deep Concentration Eyes -->
+      <line x1="168" y1="205" x2="176" y2="208" stroke="#FFB300" stroke-width="2"/>
+      <line x1="184" y1="208" x2="192" y2="205" stroke="#FFB300" stroke-width="2"/>
+      <!-- Muscular Gi Body Silhouette -->
+      <path d="M130 260 L180 240 L230 260 L245 380 L115 380 Z" fill="#140B02" stroke="#FF9800" stroke-width="1.5"/>
+      <!-- Subtle Sparks of Dormant Ki -->
+      <circle cx="100" cy="300" r="1.5" fill="#FFC107" opacity="0.6"/>
+      <circle cx="260" cy="280" r="1.8" fill="#FF9800" opacity="0.7"/>
+      <circle cx="180" cy="100" r="2" fill="#FFD54F" opacity="0.8"/>
+    </svg>

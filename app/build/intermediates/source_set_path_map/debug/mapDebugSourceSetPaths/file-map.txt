@@ -1,0 +1,80 @@
+com.parallax.wallpaper.app-work-runtime-ktx-2.10.0-0 C:\Users\VP\.gradle\caches\8.13\transforms\05220572b9d9f5b885a5e9898b54ca40\transformed\work-runtime-ktx-2.10.0\res
+com.parallax.wallpaper.app-ui-release-1 C:\Users\VP\.gradle\caches\8.13\transforms\10c6736e4461eee4d366f06491f4168a\transformed\ui-release\res
+com.parallax.wallpaper.app-core-1.15.0-2 C:\Users\VP\.gradle\caches\8.13\transforms\1161834ab8736ece6f0aa89a2e381c7b\transformed\core-1.15.0\res
+com.parallax.wallpaper.app-lifecycle-runtime-ktx-release-3 C:\Users\VP\.gradle\caches\8.13\transforms\11989622778ccb8032321815cc398283\transformed\lifecycle-runtime-ktx-release\res
+com.parallax.wallpaper.app-lifecycle-service-2.8.7-4 C:\Users\VP\.gradle\caches\8.13\transforms\13d88eab625bfc632d25bda9ce9bbe89\transformed\lifecycle-service-2.8.7\res
+com.parallax.wallpaper.app-lifecycle-livedata-core-ktx-2.8.7-5 C:\Users\VP\.gradle\caches\8.13\transforms\14800457332c5ac1641e90f29a41701b\transformed\lifecycle-livedata-core-ktx-2.8.7\res
+com.parallax.wallpaper.app-navigation-runtime-ktx-2.8.5-6 C:\Users\VP\.gradle\caches\8.13\transforms\19e62a1de92148927196cb4f247b8564\transformed\navigation-runtime-ktx-2.8.5\res
+com.parallax.wallpaper.app-ui-text-release-7 C:\Users\VP\.gradle\caches\8.13\transforms\1c5f7d91633bf4346928bfb7e77f2dce\transformed\ui-text-release\res
+com.parallax.wallpaper.app-work-runtime-2.10.0-8 C:\Users\VP\.gradle\caches\8.13\transforms\1e435c5207f4244aeb580d8672d55650\transformed\work-runtime-2.10.0\res
+com.parallax.wallpaper.app-ui-unit-release-9 C:\Users\VP\.gradle\caches\8.13\transforms\1f3aebd25b61d0accd3aba724a9cd8ee\transformed\ui-unit-release\res
+com.parallax.wallpaper.app-core-ktx-1.15.0-10 C:\Users\VP\.gradle\caches\8.13\transforms\1f9c1d00d4f66e18954a79a8f1da88c9\transformed\core-ktx-1.15.0\res
+com.parallax.wallpaper.app-ui-util-release-11 C:\Users\VP\.gradle\caches\8.13\transforms\2046248caaa18cb18f27405d23fbca36\transformed\ui-util-release\res
+com.parallax.wallpaper.app-room-ktx-2.6.1-12 C:\Users\VP\.gradle\caches\8.13\transforms\23ce975c4224f851da0232a354c4d073\transformed\room-ktx-2.6.1\res
+com.parallax.wallpaper.app-lifecycle-livedata-core-2.8.7-13 C:\Users\VP\.gradle\caches\8.13\transforms\2720e3a37acfad8bdfefc5e010ff1262\transformed\lifecycle-livedata-core-2.8.7\res
+com.parallax.wallpaper.app-navigation-runtime-2.8.5-14 C:\Users\VP\.gradle\caches\8.13\transforms\2ae11ecacb2b74777f5ddc503f64f5fc\transformed\navigation-runtime-2.8.5\res
+com.parallax.wallpaper.app-coil-base-2.7.0-15 C:\Users\VP\.gradle\caches\8.13\transforms\2b8e9fc82b6f6ea6cbb98072d4cc7f33\transformed\coil-base-2.7.0\res
+com.parallax.wallpaper.app-ui-tooling-data-release-16 C:\Users\VP\.gradle\caches\8.13\transforms\2cbe659725ca324035d985c496423164\transformed\ui-tooling-data-release\res
+com.parallax.wallpaper.app-play-services-base-18.0.1-17 C:\Users\VP\.gradle\caches\8.13\transforms\2d460e669bca95f6d00fd7b1c178fd58\transformed\play-services-base-18.0.1\res
+com.parallax.wallpaper.app-material-release-18 C:\Users\VP\.gradle\caches\8.13\transforms\2dde00c255abd5b8cad921a21a6f3ad7\transformed\material-release\res
+com.parallax.wallpaper.app-firebase-messaging-24.1.0-19 C:\Users\VP\.gradle\caches\8.13\transforms\2ffdba0b9ca099eefaeb5e20abf46041\transformed\firebase-messaging-24.1.0\res
+com.parallax.wallpaper.app-runtime-release-20 C:\Users\VP\.gradle\caches\8.13\transforms\36bc2e488dd9ee6148713c0d88d6ff7e\transformed\runtime-release\res
+com.parallax.wallpaper.app-datastore-release-21 C:\Users\VP\.gradle\caches\8.13\transforms\38f061b0412ae05441e4fafcf387679d\transformed\datastore-release\res
+com.parallax.wallpaper.app-ui-graphics-release-22 C:\Users\VP\.gradle\caches\8.13\transforms\401f2ef863079d95182f718f8523d40d\transformed\ui-graphics-release\res
+com.parallax.wallpaper.app-annotation-experimental-1.4.1-23 C:\Users\VP\.gradle\caches\8.13\transforms\42937a931de047e2910fc7cdf4f81023\transformed\annotation-experimental-1.4.1\res
+com.parallax.wallpaper.app-animation-release-24 C:\Users\VP\.gradle\caches\8.13\transforms\4439fc03976a9c0f4294a4c4e59f1482\transformed\animation-release\res
+com.parallax.wallpaper.app-lifecycle-viewmodel-ktx-2.8.7-25 C:\Users\VP\.gradle\caches\8.13\transforms\4489349e76f690de9ee970c7d529bd50\transformed\lifecycle-viewmodel-ktx-2.8.7\res
+com.parallax.wallpaper.app-activity-1.9.3-26 C:\Users\VP\.gradle\caches\8.13\transforms\47a5ddce1161b4ab896904c199d22264\transformed\activity-1.9.3\res
+com.parallax.wallpaper.app-foundation-layout-release-27 C:\Users\VP\.gradle\caches\8.13\transforms\50ed00309d115b9ba7a346ac312a708d\transformed\foundation-layout-release\res
+com.parallax.wallpaper.app-lifecycle-process-2.8.7-28 C:\Users\VP\.gradle\caches\8.13\transforms\54f51656d735c0d7b986603d450878ac\transformed\lifecycle-process-2.8.7\res
+com.parallax.wallpaper.app-lifecycle-runtime-release-29 C:\Users\VP\.gradle\caches\8.13\transforms\5a45296bb33114caae9aafe35a70f435\transformed\lifecycle-runtime-release\res
+com.parallax.wallpaper.app-foundation-release-30 C:\Users\VP\.gradle\caches\8.13\transforms\5d64ae5d6ffce184184dbeb77828efec\transformed\foundation-release\res
+com.parallax.wallpaper.app-emoji2-1.3.0-31 C:\Users\VP\.gradle\caches\8.13\transforms\63b0edcd70558668c05e8a1f661bd152\transformed\emoji2-1.3.0\res
+com.parallax.wallpaper.app-emoji2-views-helper-1.3.0-32 C:\Users\VP\.gradle\caches\8.13\transforms\6a4db58354d1df68ffa682e4531ef4c2\transformed\emoji2-views-helper-1.3.0\res
+com.parallax.wallpaper.app-fragment-1.3.6-33 C:\Users\VP\.gradle\caches\8.13\transforms\6a562c37b0c07c3b97df35a87876908c\transformed\fragment-1.3.6\res
+com.parallax.wallpaper.app-activity-ktx-1.9.3-34 C:\Users\VP\.gradle\caches\8.13\transforms\6f57ce181335710f9a40273e6d7893bc\transformed\activity-ktx-1.9.3\res
+com.parallax.wallpaper.app-tracing-ktx-1.2.0-35 C:\Users\VP\.gradle\caches\8.13\transforms\70e5b117ed9e296754fc569795e3bd6b\transformed\tracing-ktx-1.2.0\res
+com.parallax.wallpaper.app-savedstate-1.2.1-36 C:\Users\VP\.gradle\caches\8.13\transforms\74a5559f10c5ca824699efa68aa716b3\transformed\savedstate-1.2.1\res
+com.parallax.wallpaper.app-activity-compose-1.9.3-37 C:\Users\VP\.gradle\caches\8.13\transforms\777e33e9f95eb1deda0aa59bc0d03eb6\transformed\activity-compose-1.9.3\res
+com.parallax.wallpaper.app-ui-geometry-release-38 C:\Users\VP\.gradle\caches\8.13\transforms\79de515f15fca7e269adcee6218b2e42\transformed\ui-geometry-release\res
+com.parallax.wallpaper.app-lottie-6.6.2-39 C:\Users\VP\.gradle\caches\8.13\transforms\81b563799c76b6314682a4f6c9d63e03\transformed\lottie-6.6.2\res
+com.parallax.wallpaper.app-savedstate-ktx-1.2.1-40 C:\Users\VP\.gradle\caches\8.13\transforms\823354f3a3fcc7d647f0f756867f3f87\transformed\savedstate-ktx-1.2.1\res
+com.parallax.wallpaper.app-animation-core-release-41 C:\Users\VP\.gradle\caches\8.13\transforms\88f84bc0972fc3deece6c25cf3b2318d\transformed\animation-core-release\res
+com.parallax.wallpaper.app-play-services-basement-18.3.0-42 C:\Users\VP\.gradle\caches\8.13\transforms\8cc02f2e61df6d7f8fa7066e6ccb07c2\transformed\play-services-basement-18.3.0\res
+com.parallax.wallpaper.app-lifecycle-viewmodel-savedstate-2.8.7-43 C:\Users\VP\.gradle\caches\8.13\transforms\8e04ac5c4737604f7dd9754bbb7bf64f\transformed\lifecycle-viewmodel-savedstate-2.8.7\res
+com.parallax.wallpaper.app-graphics-path-1.0.1-44 C:\Users\VP\.gradle\caches\8.13\transforms\90ef085904a1616976de2307109c3bd8\transformed\graphics-path-1.0.1\res
+com.parallax.wallpaper.app-runtime-saveable-release-45 C:\Users\VP\.gradle\caches\8.13\transforms\92b0ff9fb16c7b81a95f693d69057e6d\transformed\runtime-saveable-release\res
+com.parallax.wallpaper.app-androidsvg-aar-1.4-46 C:\Users\VP\.gradle\caches\8.13\transforms\92dd071325a28bd411903db0d0b5437c\transformed\androidsvg-aar-1.4\res
+com.parallax.wallpaper.app-core-runtime-2.2.0-47 C:\Users\VP\.gradle\caches\8.13\transforms\93c641ef3cfaed8241d866a1a06c03af\transformed\core-runtime-2.2.0\res
+com.parallax.wallpaper.app-lifecycle-runtime-compose-release-48 C:\Users\VP\.gradle\caches\8.13\transforms\9923964494165634f54ddb41aadd0adb\transformed\lifecycle-runtime-compose-release\res
+com.parallax.wallpaper.app-material-icons-extended-release-49 C:\Users\VP\.gradle\caches\8.13\transforms\9b7b5e869d17af80ef524c50468a292e\transformed\material-icons-extended-release\res
+com.parallax.wallpaper.app-navigation-compose-2.8.5-50 C:\Users\VP\.gradle\caches\8.13\transforms\9ed66aab0949add2943f24e8f97f8bf3\transformed\navigation-compose-2.8.5\res
+com.parallax.wallpaper.app-sqlite-framework-2.4.0-51 C:\Users\VP\.gradle\caches\8.13\transforms\a20885b2a58b2e39b0f4a97b91befa71\transformed\sqlite-framework-2.4.0\res
+com.parallax.wallpaper.app-material-ripple-release-52 C:\Users\VP\.gradle\caches\8.13\transforms\a9ecc99e4ff78a0eb69538cadb94a73e\transformed\material-ripple-release\res
+com.parallax.wallpaper.app-ui-tooling-preview-release-53 C:\Users\VP\.gradle\caches\8.13\transforms\aa97ed752c1f139b3d3af22e456d02f4\transformed\ui-tooling-preview-release\res
+com.parallax.wallpaper.app-lifecycle-viewmodel-release-54 C:\Users\VP\.gradle\caches\8.13\transforms\abd93a0885d78e5d4f7d32cccf55b3ac\transformed\lifecycle-viewmodel-release\res
+com.parallax.wallpaper.app-lifecycle-viewmodel-compose-release-55 C:\Users\VP\.gradle\caches\8.13\transforms\b20cfe937cb3ce43810f41213d4f859b\transformed\lifecycle-viewmodel-compose-release\res
+com.parallax.wallpaper.app-tracing-1.2.0-56 C:\Users\VP\.gradle\caches\8.13\transforms\b76274b50eb411850166f0f5a978fabf\transformed\tracing-1.2.0\res
+com.parallax.wallpaper.app-lifecycle-livedata-2.8.7-57 C:\Users\VP\.gradle\caches\8.13\transforms\b89a91ebb6c4a02c1ad27073fc8cdcd4\transformed\lifecycle-livedata-2.8.7\res
+com.parallax.wallpaper.app-appcompat-1.6.1-58 C:\Users\VP\.gradle\caches\8.13\transforms\b90bc3923f2cc0b9e65d06aafbd6f0b3\transformed\appcompat-1.6.1\res
+com.parallax.wallpaper.app-firebase-common-21.0.0-59 C:\Users\VP\.gradle\caches\8.13\transforms\b918accb5bfaf0de03ac775c25b47f8d\transformed\firebase-common-21.0.0\res
+com.parallax.wallpaper.app-navigation-common-ktx-2.8.5-60 C:\Users\VP\.gradle\caches\8.13\transforms\bb276d982800a72fd151403c12c482a1\transformed\navigation-common-ktx-2.8.5\res
+com.parallax.wallpaper.app-ui-tooling-release-61 C:\Users\VP\.gradle\caches\8.13\transforms\ca4aaf239e8481678656e7a3a58a3b87\transformed\ui-tooling-release\res
+com.parallax.wallpaper.app-datastore-core-release-62 C:\Users\VP\.gradle\caches\8.13\transforms\ca6cf72bb28596f858290862b2211445\transformed\datastore-core-release\res
+com.parallax.wallpaper.app-appcompat-resources-1.6.1-63 C:\Users\VP\.gradle\caches\8.13\transforms\cd26b8f080f5cf55d2c32796c3b61743\transformed\appcompat-resources-1.6.1\res
+com.parallax.wallpaper.app-customview-poolingcontainer-1.0.0-64 C:\Users\VP\.gradle\caches\8.13\transforms\d117b4dd4aa87c4944b56e9e320e53d6\transformed\customview-poolingcontainer-1.0.0\res
+com.parallax.wallpaper.app-startup-runtime-1.1.1-65 C:\Users\VP\.gradle\caches\8.13\transforms\d1329b6346d8f5e0971803a690e75c22\transformed\startup-runtime-1.1.1\res
+com.parallax.wallpaper.app-room-runtime-2.6.1-66 C:\Users\VP\.gradle\caches\8.13\transforms\d142f293ff1a6bce8d78d332c5b6f1a1\transformed\room-runtime-2.6.1\res
+com.parallax.wallpaper.app-navigation-common-2.8.5-67 C:\Users\VP\.gradle\caches\8.13\transforms\d6e5090a158a9bc6b50e25f108b8e576\transformed\navigation-common-2.8.5\res
+com.parallax.wallpaper.app-datastore-preferences-release-68 C:\Users\VP\.gradle\caches\8.13\transforms\e3ff82d8c2a0a6b1068823df0186ea78\transformed\datastore-preferences-release\res
+com.parallax.wallpaper.app-material3-release-69 C:\Users\VP\.gradle\caches\8.13\transforms\e4c65afec2d3f705d2d46d2bf160c982\transformed\material3-release\res
+com.parallax.wallpaper.app-profileinstaller-1.3.1-70 C:\Users\VP\.gradle\caches\8.13\transforms\e7ab6d0418abcafbecaf1ddc5c87dad4\transformed\profileinstaller-1.3.1\res
+com.parallax.wallpaper.app-sqlite-2.4.0-71 C:\Users\VP\.gradle\caches\8.13\transforms\f055c345cb15c3e44b1c4b92d8ab26ea\transformed\sqlite-2.4.0\res
+com.parallax.wallpaper.app-material-icons-core-release-72 C:\Users\VP\.gradle\caches\8.13\transforms\fd6b7adebadebf33f9710ebe44552e6a\transformed\material-icons-core-release\res
+com.parallax.wallpaper.app-res-73 D:\kotlin\parralex wallpaper\app\build\generated\res\processDebugGoogleServices
+com.parallax.wallpaper.app-resValues-74 D:\kotlin\parralex wallpaper\app\build\generated\res\resValues\debug
+com.parallax.wallpaper.app-packageDebugResources-75 D:\kotlin\parralex wallpaper\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.parallax.wallpaper.app-packageDebugResources-76 D:\kotlin\parralex wallpaper\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.parallax.wallpaper.app-debug-77 D:\kotlin\parralex wallpaper\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.parallax.wallpaper.app-debug-78 D:\kotlin\parralex wallpaper\app\src\debug\res
+com.parallax.wallpaper.app-main-79 D:\kotlin\parralex wallpaper\app\src\main\res

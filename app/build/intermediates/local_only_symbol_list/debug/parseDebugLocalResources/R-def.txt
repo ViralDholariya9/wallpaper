@@ -1,0 +1,31 @@
+R_DEF: Internal format may change without notice
+local
+color background_dark
+color card_dark
+color primary
+color primary_variant
+color secondary
+color surface_dark
+color text_primary
+color text_secondary
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string gcm_defaultSenderId
+string google_api_key
+string google_app_id
+string google_crash_reporting_api_key
+string google_storage_bucket
+string live_wallpaper_description
+string live_wallpaper_name
+string nav_favorites
+string nav_home
+string nav_parallax
+string nav_settings
+string project_id
+style Theme.ParallaxWallpaper
+xml backup_rules
+xml data_extraction_rules
+xml parallax_wallpaper

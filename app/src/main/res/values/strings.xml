@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Parallax 3D Wallpaper</string>
+    <string name="live_wallpaper_name">Parallax 3D Live Wallpaper</string>
+    <string name="live_wallpaper_description">Stunning 3D depth parallax live wallpaper reacting dynamically to device tilt and movement.</string>
+    <string name="nav_home">Explore</string>
+    <string name="nav_parallax">3D Parallax</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_settings">Settings</string>
+</resources>

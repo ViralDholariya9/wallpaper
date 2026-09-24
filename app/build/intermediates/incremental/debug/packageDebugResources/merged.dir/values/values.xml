@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_dark">#0D0E15</color>
+    <color name="card_dark">#232638</color>
+    <color name="primary">#7C4DFF</color>
+    <color name="primary_variant">#651FFF</color>
+    <color name="secondary">#00E5FF</color>
+    <color name="surface_dark">#181A26</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#9E9EA7</color>
+    <string name="app_name">Parallax 3D Wallpaper</string>
+    <string name="gcm_defaultSenderId" translatable="false">6289080237</string>
+    <string name="google_api_key" translatable="false">AIzaSyCieAi2Uqsnrx5uFXfrSGR7MtQlYZv34MM</string>
+    <string name="google_app_id" translatable="false">1:6289080237:android:a7dac9c876dceb3b866b24</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCieAi2Uqsnrx5uFXfrSGR7MtQlYZv34MM</string>
+    <string name="google_storage_bucket" translatable="false">parallex-wallpaper-16b7a.firebasestorage.app</string>
+    <string name="live_wallpaper_description">Stunning 3D depth parallax live wallpaper reacting dynamically to device tilt and movement.</string>
+    <string name="live_wallpaper_name">Parallax 3D Live Wallpaper</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_home">Explore</string>
+    <string name="nav_parallax">3D Parallax</string>
+    <string name="nav_settings">Settings</string>
+    <string name="project_id" translatable="false">parallex-wallpaper-16b7a</string>
+    <style name="Theme.ParallaxWallpaper" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+    </style>
+</resources>

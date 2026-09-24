@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="portalBgHome" cx="50%" cy="42%" r="85%">
+          <stop offset="0%" stop-color="#3A0866"/>
+          <stop offset="45%" stop-color="#140228"/>
+          <stop offset="100%" stop-color="#020008"/>
+        </radialGradient>
+        <radialGradient id="wormholeVortex" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="25%" stop-color="#00E5FF"/>
+          <stop offset="55%" stop-color="#7000FF"/>
+          <stop offset="85%" stop-color="#FF007F"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#portalBgHome)"/>
+      <!-- Hyperspace Wormhole BLASTING Through Stargate Ring -->
+      <circle cx="180" cy="270" r="130" fill="url(#wormholeVortex)" opacity="0.95"/>
+      <!-- Swirling Hyperspace Vortex Spiral Arcs -->
+      <ellipse cx="180" cy="270" rx="95" ry="40" fill="none" stroke="#00E5FF" stroke-width="3" opacity="0.8" transform="rotate(30 180 270)"/>
+      <ellipse cx="180" cy="270" rx="95" ry="40" fill="none" stroke="#FF007F" stroke-width="2.5" opacity="0.75" transform="rotate(-40 180 270)"/>
+      <ellipse cx="180" cy="270" rx="80" ry="25" fill="none" stroke="#FFF" stroke-width="2" opacity="0.9" transform="rotate(75 180 270)"/>
+      <!-- Blazing Stargate Ring with Glowing Runes -->
+      <circle cx="180" cy="270" r="110" fill="none" stroke="#00E5FF" stroke-width="16" opacity="0.85"/>
+      <circle cx="180" cy="270" r="118" fill="none" stroke="#FFF" stroke-width="2.5"/>
+      <circle cx="180" cy="270" r="102" fill="none" stroke="#00E5FF" stroke-width="2.5"/>
+      <!-- Glowing Activated Runes -->
+      <circle cx="180" cy="160" r="7" fill="#00E5FF" stroke="#FFF" stroke-width="2"/>
+      <circle cx="280" cy="230" r="7" fill="#00E5FF" stroke="#FFF" stroke-width="2"/>
+      <circle cx="270" cy="330" r="7" fill="#00E5FF" stroke="#FFF" stroke-width="2"/>
+      <circle cx="90" cy="230" r="7" fill="#00E5FF" stroke="#FFF" stroke-width="2"/>
+      <circle cx="100" cy="330" r="7" fill="#00E5FF" stroke="#FFF" stroke-width="2"/>
+      <!-- Energy Beams shooting out -->
+      <line x1="180" y1="270" x2="40" y2="80" stroke="#00E5FF" stroke-width="2" opacity="0.65"/>
+      <line x1="180" y1="270" x2="320" y2="90" stroke="#FF007F" stroke-width="2" opacity="0.65"/>
+      <line x1="180" y1="270" x2="180" y2="40" stroke="#FFF" stroke-width="3" opacity="0.8"/>
+      <!-- Core Energy Flare -->
+      <circle cx="180" cy="270" r="28" fill="#FFF"/>
+      <!-- Glowing Pedestal with Runes -->
+      <polygon points="120,440 240,440 270,640 90,640" fill="#14062E" stroke="#00E5FF" stroke-width="2"/>
+      <line x1="180" y1="440" x2="180" y2="640" stroke="#00E5FF" stroke-width="2" stroke-dasharray="8 6"/>
+    </svg>

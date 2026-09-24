@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="samuraiBgLock" cx="50%" cy="40%" r="75%">
+          <stop offset="0%" stop-color="#14072b"/>
+          <stop offset="50%" stop-color="#070212"/>
+          <stop offset="100%" stop-color="#020006"/>
+        </radialGradient>
+        <linearGradient id="cyberHazeLock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7000FF" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#samuraiBgLock)"/>
+      <circle cx="180" cy="240" r="120" fill="none" stroke="#7000FF" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.35"/>
+      <circle cx="180" cy="240" r="90" fill="none" stroke="#00E5FF" stroke-width="1" opacity="0.25"/>
+      <!-- Meditating Samurai Silhouette (Eyes Closed / Dormant Energy) -->
+      <path d="M180 150 C160 150 148 165 148 185 C148 205 160 215 180 215 C200 215 212 205 212 185 C212 165 200 150 180 150 Z" fill="#1c0f38" stroke="#7000FF" stroke-width="2"/>
+      <!-- Horns / Cyber Kabuto Helmet -->
+      <path d="M152 165 L130 135 L145 155 Z" fill="#7000FF" opacity="0.8"/>
+      <path d="M208 165 L230 135 L215 155 Z" fill="#7000FF" opacity="0.8"/>
+      <!-- Closed Eyes (Subtle dormant slit lines) -->
+      <line x1="165" y1="188" x2="173" y2="188" stroke="#4A148C" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="187" y1="188" x2="195" y2="188" stroke="#4A148C" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Robe / Shoulders resting -->
+      <path d="M120 280 C120 230 150 220 180 220 C210 220 240 230 240 280 L250 360 L110 360 Z" fill="#0f0722" stroke="#7000FF" stroke-width="2"/>
+      <!-- Sheathed Katana across lap -->
+      <rect x="90" y="320" width="180" height="8" rx="4" fill="#2A1B4E" stroke="#7000FF" stroke-width="1.5"/>
+      <rect x="235" y="318" width="35" height="12" rx="2" fill="#7000FF" opacity="0.7"/>
+      <!-- Dormant Embers floating -->
+      <circle cx="100" cy="420" r="1.5" fill="#7000FF" opacity="0.6"/>
+      <circle cx="260" cy="460" r="1.8" fill="#00E5FF" opacity="0.4"/>
+      <circle cx="150" cy="500" r="1.2" fill="#7000FF" opacity="0.5"/>
+    </svg>

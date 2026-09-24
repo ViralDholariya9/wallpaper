@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320">
+  <defs>
+    <linearGradient id="goldHand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="320" fill="#000000" rx="36"/>
+  
+  <!-- Outer Minimalist Dial Ring -->
+  <circle cx="160" cy="160" r="130" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5"/>
+  <circle cx="160" cy="160" r="126" fill="none" stroke="rgba(56, 189, 248, 0.25)" stroke-width="1" stroke-dasharray="2, 10"/>
+
+  <!-- 12 Hour Minimalist Tick Marks -->
+  <circle cx="160" cy="45" r="3.5" fill="#38BDF8"/>
+  <circle cx="275" cy="160" r="3.5" fill="#E2E8F0"/>
+  <circle cx="160" cy="275" r="3.5" fill="#E2E8F0"/>
+  <circle cx="45" cy="160" r="3.5" fill="#E2E8F0"/>
+
+  <circle cx="217.5" cy="60.4" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="259.6" cy="102.5" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="259.6" cy="217.5" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="217.5" cy="259.6" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="102.5" cy="259.6" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="60.4" cy="217.5" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="60.4" cy="102.5" r="2" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="102.5" cy="60.4" r="2" fill="rgba(255,255,255,0.4)"/>
+
+  <!-- Sleek Hands -->
+  <line x1="160" y1="160" x2="115" y2="105" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="160" y1="160" x2="225" y2="120" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+  <line x1="160" y1="180" x2="160" y2="65" stroke="#00E5FF" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- Center Pin -->
+  <circle cx="160" cy="160" r="6" fill="#000000" stroke="#00E5FF" stroke-width="2"/>
+  <circle cx="160" cy="160" r="2" fill="#FFFFFF"/>
+
+  <!-- Subdial Date Pill -->
+  <rect x="135" y="195" width="50" height="20" rx="6" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="160" y="209" font-family="sans-serif" font-size="10" font-weight="700" fill="#38BDF8" text-anchor="middle">MON 14</text>
+</svg>

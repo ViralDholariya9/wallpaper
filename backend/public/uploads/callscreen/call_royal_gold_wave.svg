@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <linearGradient id="goldBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#241b0b"/>
+          <stop offset="45%" stop-color="#0c0803"/>
+          <stop offset="100%" stop-color="#140f06"/>
+        </linearGradient>
+        <linearGradient id="goldRibbon1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFF3B0" stop-opacity="0.9"/>
+          <stop offset="40%" stop-color="#FFD700" stop-opacity="0.85"/>
+          <stop offset="80%" stop-color="#FF9800" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#795548" stop-opacity="0.2"/>
+        </linearGradient>
+        <linearGradient id="goldRibbon2" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFE082" stop-opacity="0.7"/>
+          <stop offset="50%" stop-color="#FFB300" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#3E2723" stop-opacity="0.15"/>
+        </linearGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#goldBg)"/>
+      <!-- 3D Silk Ribbons -->
+      <path d="M-60 180 Q100 40 220 180 T440 140" fill="none" stroke="url(#goldRibbon1)" stroke-width="36" opacity="0.35"/>
+      <path d="M-40 220 Q120 80 240 220 T460 180" fill="none" stroke="url(#goldRibbon1)" stroke-width="18" opacity="0.5"/>
+      <path d="M-80 380 Q100 240 250 420 T460 350" fill="none" stroke="url(#goldRibbon2)" stroke-width="42" opacity="0.28"/>
+      <path d="M-50 410 Q120 270 270 440 T480 380" fill="none" stroke="url(#goldRibbon2)" stroke-width="16" opacity="0.45"/>
+      <!-- Royal Halo Rings -->
+      <circle cx="180" cy="200" r="105" fill="none" stroke="#FFD700" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.35"/>
+      <circle cx="180" cy="200" r="82" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.4"/>
+      <!-- Golden Stardust Particles -->
+      <circle cx="60" cy="110" r="2.5" fill="#FFE082" opacity="0.8"/>
+      <circle cx="110" cy="80" r="1.8" fill="#FFF" opacity="0.9"/>
+      <circle cx="280" cy="120" r="2.2" fill="#FFE082" opacity="0.85"/>
+      <circle cx="320" cy="170" r="3" fill="#FFD700" opacity="0.9"/>
+      <circle cx="70" cy="320" r="2.5" fill="#FFD700" opacity="0.75"/>
+      <circle cx="290" cy="480" r="3.2" fill="#FFE082" opacity="0.85"/>
+      <circle cx="160" cy="530" r="2" fill="#FFF" opacity="0.9"/>
+    </svg>

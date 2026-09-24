@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 640" width="100%" height="100%">
+      <defs>
+        <radialGradient id="saiyanBgHome" cx="50%" cy="40%" r="85%">
+          <stop offset="0%" stop-color="#422800"/>
+          <stop offset="45%" stop-color="#1C1000"/>
+          <stop offset="100%" stop-color="#050200"/>
+        </radialGradient>
+        <linearGradient id="saiyanAura" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#FF6F00" stop-opacity="0.9"/>
+          <stop offset="50%" stop-color="#FFD600" stop-opacity="0.85"/>
+          <stop offset="85%" stop-color="#FFF" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#00E5FF" stop-opacity="0.7"/>
+        </linearGradient>
+      </defs>
+      <rect width="360" height="640" fill="url(#saiyanBgHome)"/>
+      <!-- EXPLODING SUPER SAIYAN GOD KI AURA -->
+      <path d="M180 30 C100 120 70 240 70 420 C70 540 120 600 180 600 C240 600 290 540 290 420 C290 240 260 120 180 30 Z" fill="url(#saiyanAura)" opacity="0.45"/>
+      <path d="M180 70 C120 150 95 250 95 400 C95 500 135 560 180 560 C225 560 265 500 265 400 C265 250 240 150 180 70 Z" fill="url(#saiyanAura)" opacity="0.6"/>
+      <!-- Blazing Electric Plasma Lightning Arcs -->
+      <path d="M70 220 L110 260 L90 290 L130 350" fill="none" stroke="#00E5FF" stroke-width="3"/>
+      <path d="M290 200 L250 250 L270 280 L230 340" fill="none" stroke="#00E5FF" stroke-width="3"/>
+      <path d="M120 140 L150 180 L140 200" fill="none" stroke="#FFF" stroke-width="2.5"/>
+      <path d="M240 130 L210 175 L220 195" fill="none" stroke="#FFF" stroke-width="2.5"/>
+      <!-- Blazing Golden Upward Spikes Hair -->
+      <polygon points="180,60 150,130 125,100 130,170 100,150 115,210 180,195 245,210 260,150 230,170 235,100 210,130" fill="#FFD600" stroke="#FFF" stroke-width="2.5"/>
+      <!-- Glowing Eyes with Cyan God Iris -->
+      <path d="M165 195 L180 225 L195 195 Z" fill="#FFECB3" stroke="#FF6F00" stroke-width="1.5"/>
+      <ellipse cx="171" cy="202" rx="4" ry="2.5" fill="#00E5FF"/>
+      <circle cx="171" cy="202" r="1.5" fill="#FFF"/>
+      <ellipse cx="189" cy="202" rx="4" ry="2.5" fill="#00E5FF"/>
+      <circle cx="189" cy="202" r="1.5" fill="#FFF"/>
+      <!-- Awakened Gi with Fiery Radiance -->
+      <path d="M115 250 L180 230 L245 250 L265 380 L95 380 Z" fill="#E65100" stroke="#FFD600" stroke-width="2.5"/>
+      <!-- Rising Ki Spheres -->
+      <circle cx="140" cy="180" r="4" fill="#00E5FF"/>
+      <circle cx="220" cy="160" r="4.5" fill="#FFD600"/>
+      <circle cx="180" cy="50" r="5" fill="#FFF"/>
+    </svg>
