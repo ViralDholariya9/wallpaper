@@ -222,7 +222,6 @@ function initAuth() {
   const loginForm = document.getElementById('loginForm');
   const loginErr = document.getElementById('loginErrorAlert');
   const togglePassBtn = document.getElementById('togglePasswordBtn');
-  const autoFillBtn = document.getElementById('autoFillLoginBtn');
   const passInput = document.getElementById('loginPassword');
 
   if (togglePassBtn) {
@@ -230,14 +229,6 @@ function initAuth() {
       const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
       passInput.setAttribute('type', type);
       togglePassBtn.textContent = type === 'password' ? '👁️' : '🙈';
-    });
-  }
-
-  if (autoFillBtn) {
-    autoFillBtn.addEventListener('click', () => {
-      document.getElementById('loginUsername').value = 'admin';
-      passInput.value = 'admin123';
-      showToast('Default credentials loaded: admin / admin123');
     });
   }
 
