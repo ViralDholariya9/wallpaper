@@ -739,10 +739,50 @@ router.post('/categories', verifyAdminToken, async (req, res) => {
 // DELETE /api/admin/categories/:id
 router.delete('/categories/:id', verifyAdminToken, async (req, res) => {
   try {
-    await db.runAsync('DELETE FROM categories WHERE id = ?', [req.params.id]);
-    res.json({ success: true, message: 'Category deleted' });
+    const rawId = req.params.id;
+    const categoryId = decodeURIComponent(rawId).trim();
+
+    // Check if category exists (support exact or case-insensitive ID)
+    const category = await db.getAsync(
+      'SELECT * FROM categories WHERE id = ? OR LOWER(id) = LOWER(?)',
+      [categoryId, categoryId]
+    );
+
+    const targetId = category ? category.id : categoryId;
+
+    // Check count of wallpapers in this category
+    const wpCountRow = await db.getAsync(
+      'SELECT COUNT(*) as count FROM wallpapers WHERE category = ?',
+      [targetId]
+    );
+    const wpCount = wpCountRow ? wpCountRow.count : 0;
+
+    if (wpCount > 0) {
+      // Ensure 'GENERAL' category exists so wallpapers are never orphaned
+      await db.runAsync(`
+        INSERT OR IGNORE INTO categories (id, name, iconUrl)
+        VALUES ('GENERAL', 'General', 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png')
+      `);
+      // Safely reassign wallpapers
+      await db.runAsync(
+        'UPDATE wallpapers SET category = ? WHERE category = ?',
+        ['GENERAL', targetId]
+      );
+    }
+
+    await db.runAsync(
+      'DELETE FROM categories WHERE id = ? OR LOWER(id) = LOWER(?)',
+      [targetId, targetId]
+    );
+
+    res.json({
+      success: true,
+      message: `Category "${category ? category.name : targetId}" deleted successfully`,
+      reassignedWallpapers: wpCount
+    });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    console.error('Error deleting category:', err);
+    res.status(500).json({ success: false, error: err.message || 'Server error deleting category' });
   }
 });
 

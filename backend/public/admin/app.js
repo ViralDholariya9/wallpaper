@@ -753,6 +753,7 @@ async function loadCategories() {
 
 function renderCategoriesList() {
   const container = document.getElementById('categoriesList');
+  if (!container) return;
   container.innerHTML = allCategories.map(cat => `
     <div class="category-row">
       <div class="cat-icon-name">
@@ -762,7 +763,7 @@ function renderCategoriesList() {
           <div style="font-size:11px; color:#8E99B0;">ID: ${cat.id} &bull; ${cat.count || 0} wallpapers</div>
         </div>
       </div>
-      <button class="btn btn-sm btn-danger" onclick="deleteCategory('${cat.id}')">Delete</button>
+      <button class="btn btn-sm btn-danger" onclick="openDeleteCategoryModal('${cat.id}')">Delete</button>
     </div>
   `).join('');
 }
@@ -1650,24 +1651,88 @@ document.getElementById('addCategoryForm').addEventListener('submit', async (e) 
   }
 });
 
-async function deleteCategory(id) {
-  if (!confirm(`Are you sure you want to delete category "${id}"?`)) return;
-  try {
-    const res = await authFetch(`/api/admin/categories/${id}`, { method: 'DELETE' });
-    const json = await res.json();
-    if (json.success) {
-      showToast('Category deleted');
-      await loadCategories();
-    }
-  } catch (err) {
-    alert('Error: ' + err.message);
+let categoryToDelete = null;
+
+function openDeleteCategoryModal(id) {
+  const cat = allCategories.find(c => c.id === id) || { id, name: id, count: 0 };
+  categoryToDelete = cat;
+
+  const modal = document.getElementById('deleteCategoryModal');
+  const nameEl = document.getElementById('deleteCatTargetName');
+  const idEl = document.getElementById('deleteCatTargetId');
+  const badgeEl = document.getElementById('deleteCatWallpaperBadge');
+  const warnEl = document.getElementById('deleteCatWallpaperWarning');
+  const confirmBtn = document.getElementById('confirmDeleteCatBtn');
+
+  if (nameEl) nameEl.textContent = cat.name || cat.id;
+  if (idEl) idEl.textContent = cat.id;
+  const count = cat.count || 0;
+  if (badgeEl) badgeEl.textContent = `${count} wallpaper${count === 1 ? '' : 's'}`;
+  if (warnEl) warnEl.style.display = count > 0 ? 'block' : 'none';
+  if (confirmBtn) {
+    confirmBtn.disabled = false;
+    confirmBtn.innerHTML = '🗑️ Confirm Delete';
   }
+
+  if (modal) modal.classList.add('active');
+}
+
+function closeDeleteCategoryModal() {
+  const modal = document.getElementById('deleteCategoryModal');
+  if (modal) modal.classList.remove('active');
+  categoryToDelete = null;
+}
+
+async function deleteCategory(id) {
+  openDeleteCategoryModal(id);
 }
 
 // 6. MODALS & 3D LAYER BUILDER
 function initModals() {
   const wpModal = document.getElementById('wallpaperModal');
   const rtModal = document.getElementById('ringtoneModal');
+
+  // Category Delete Confirmation Modal Event Listeners
+  document.getElementById('closeDeleteCatModal')?.addEventListener('click', closeDeleteCategoryModal);
+  document.getElementById('cancelDeleteCatBtn')?.addEventListener('click', closeDeleteCategoryModal);
+
+  document.getElementById('confirmDeleteCatBtn')?.addEventListener('click', async () => {
+    if (!categoryToDelete) return;
+    const btn = document.getElementById('confirmDeleteCatBtn');
+    const id = categoryToDelete.id;
+    const name = categoryToDelete.name || id;
+
+    try {
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span> Deleting...';
+      }
+
+      const res = await authFetch(`/api/admin/categories/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const json = await res.json();
+
+      if (json.success) {
+        showToast(json.message || `Category "${name}" deleted successfully`);
+        closeDeleteCategoryModal();
+        await loadCategories();
+        if (typeof loadWallpapers === 'function') await loadWallpapers();
+        if (typeof loadStats === 'function') await loadStats();
+      } else {
+        showToast(json.error || 'Failed to delete category');
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '🗑️ Confirm Delete';
+        }
+      }
+    } catch (err) {
+      console.error('Category delete error:', err);
+      showToast('Error: ' + err.message);
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '🗑️ Confirm Delete';
+      }
+    }
+  });
 
   document.getElementById('openUploadModalBtn').addEventListener('click', () => {
     openCreateWallpaperModal();
