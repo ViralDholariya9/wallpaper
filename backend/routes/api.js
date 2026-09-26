@@ -331,13 +331,16 @@ router.get('/app-config', async (req, res) => {
         admob: {
           bannerEnabled: configMap['admob_banner_enabled'] !== 'false',
           interstitialEnabled: configMap['admob_interstitial_enabled'] !== 'false',
+          nativeEnabled: configMap['admob_native_enabled'] !== 'false',
           rewardedInterval: parseInt(configMap['admob_rewarded_interval'] || '3', 10),
           interstitialInterval: parseInt(configMap['admob_interstitial_interval'] || '3', 10),
+          nativeInterval: parseInt(configMap['admob_native_interval'] || '6', 10),
           appId: configMap['admob_app_id'] || 'ca-app-pub-3940256099942544~3347511713',
           bannerId: configMap['admob_banner_id'] || 'ca-app-pub-3940256099942544/6300978111',
           interstitialId: configMap['admob_interstitial_id'] || 'ca-app-pub-3940256099942544/1033173712',
           rewardedId: configMap['admob_rewarded_id'] || 'ca-app-pub-3940256099942544/5224354917',
           appOpenId: configMap['admob_app_open_id'] || 'ca-app-pub-3940256099942544/9257395921',
+          nativeId: configMap['admob_native_id'] || 'ca-app-pub-3940256099942544/2247696110',
           isTestMode: configMap['admob_is_test_mode'] !== 'false'
         },
 

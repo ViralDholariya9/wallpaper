@@ -5392,7 +5392,8 @@ const GOOGLE_ADMOB_TEST_IDS = {
   bannerId: 'ca-app-pub-3940256099942544/6300978111',
   interstitialId: 'ca-app-pub-3940256099942544/1033173712',
   rewardedId: 'ca-app-pub-3940256099942544/5224354917',
-  appOpenId: 'ca-app-pub-3940256099942544/9257395921'
+  appOpenId: 'ca-app-pub-3940256099942544/9257395921',
+  nativeId: 'ca-app-pub-3940256099942544/2247696110'
 };
 
 async function loadAdmobConfig() {
@@ -5405,25 +5406,31 @@ async function loadAdmobConfig() {
 
     const cfgBanner = document.getElementById('cfgBanner');
     const cfgInterstitial = document.getElementById('cfgInterstitial');
+    const cfgNative = document.getElementById('cfgNative');
     const cfgRewardedInterval = document.getElementById('cfgRewardedInterval');
     const cfgInterstitialInterval = document.getElementById('cfgInterstitialInterval');
+    const cfgNativeInterval = document.getElementById('cfgNativeInterval');
     const cfgAdmobAppId = document.getElementById('cfgAdmobAppId');
     const cfgAdmobBannerId = document.getElementById('cfgAdmobBannerId');
     const cfgAdmobInterstitialId = document.getElementById('cfgAdmobInterstitialId');
     const cfgAdmobRewardedId = document.getElementById('cfgAdmobRewardedId');
     const cfgAdmobAppOpenId = document.getElementById('cfgAdmobAppOpenId');
+    const cfgAdmobNativeId = document.getElementById('cfgAdmobNativeId');
     const cfgAdmobTestMode = document.getElementById('cfgAdmobTestMode');
 
     if (cfgBanner) cfgBanner.checked = admob.bannerEnabled !== false;
     if (cfgInterstitial) cfgInterstitial.checked = admob.interstitialEnabled !== false;
+    if (cfgNative) cfgNative.checked = admob.nativeEnabled !== false;
     if (cfgRewardedInterval) cfgRewardedInterval.value = admob.rewardedInterval || 3;
     if (cfgInterstitialInterval) cfgInterstitialInterval.value = admob.interstitialInterval || 3;
+    if (cfgNativeInterval) cfgNativeInterval.value = admob.nativeInterval || 6;
 
     if (cfgAdmobAppId) cfgAdmobAppId.value = admob.appId || GOOGLE_ADMOB_TEST_IDS.appId;
     if (cfgAdmobBannerId) cfgAdmobBannerId.value = admob.bannerId || GOOGLE_ADMOB_TEST_IDS.bannerId;
     if (cfgAdmobInterstitialId) cfgAdmobInterstitialId.value = admob.interstitialId || GOOGLE_ADMOB_TEST_IDS.interstitialId;
     if (cfgAdmobRewardedId) cfgAdmobRewardedId.value = admob.rewardedId || GOOGLE_ADMOB_TEST_IDS.rewardedId;
     if (cfgAdmobAppOpenId) cfgAdmobAppOpenId.value = admob.appOpenId || GOOGLE_ADMOB_TEST_IDS.appOpenId;
+    if (cfgAdmobNativeId) cfgAdmobNativeId.value = admob.nativeId || GOOGLE_ADMOB_TEST_IDS.nativeId;
     if (cfgAdmobTestMode) cfgAdmobTestMode.checked = admob.isTestMode !== false;
 
     updateAdmobBadge();
@@ -5459,6 +5466,7 @@ function loadGoogleTestAdmobIds() {
   const cfgAdmobInterstitialId = document.getElementById('cfgAdmobInterstitialId');
   const cfgAdmobRewardedId = document.getElementById('cfgAdmobRewardedId');
   const cfgAdmobAppOpenId = document.getElementById('cfgAdmobAppOpenId');
+  const cfgAdmobNativeId = document.getElementById('cfgAdmobNativeId');
   const cfgAdmobTestMode = document.getElementById('cfgAdmobTestMode');
 
   if (cfgAdmobAppId) cfgAdmobAppId.value = GOOGLE_ADMOB_TEST_IDS.appId;
@@ -5466,6 +5474,7 @@ function loadGoogleTestAdmobIds() {
   if (cfgAdmobInterstitialId) cfgAdmobInterstitialId.value = GOOGLE_ADMOB_TEST_IDS.interstitialId;
   if (cfgAdmobRewardedId) cfgAdmobRewardedId.value = GOOGLE_ADMOB_TEST_IDS.rewardedId;
   if (cfgAdmobAppOpenId) cfgAdmobAppOpenId.value = GOOGLE_ADMOB_TEST_IDS.appOpenId;
+  if (cfgAdmobNativeId) cfgAdmobNativeId.value = GOOGLE_ADMOB_TEST_IDS.nativeId;
   if (cfgAdmobTestMode) cfgAdmobTestMode.checked = true;
 
   updateAdmobBadge();
@@ -5493,13 +5502,16 @@ async function saveAdmobConfig() {
 
   const bannerEnabled = document.getElementById('cfgBanner')?.checked ?? true;
   const interstitialEnabled = document.getElementById('cfgInterstitial')?.checked ?? true;
+  const nativeEnabled = document.getElementById('cfgNative')?.checked ?? true;
   const rewardedInterval = parseInt(document.getElementById('cfgRewardedInterval')?.value || '3', 10);
   const interstitialInterval = parseInt(document.getElementById('cfgInterstitialInterval')?.value || '3', 10);
+  const nativeInterval = parseInt(document.getElementById('cfgNativeInterval')?.value || '6', 10);
   const appId = document.getElementById('cfgAdmobAppId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.appId;
   const bannerId = document.getElementById('cfgAdmobBannerId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.bannerId;
   const interstitialId = document.getElementById('cfgAdmobInterstitialId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.interstitialId;
   const rewardedId = document.getElementById('cfgAdmobRewardedId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.rewardedId;
   const appOpenId = document.getElementById('cfgAdmobAppOpenId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.appOpenId;
+  const nativeId = document.getElementById('cfgAdmobNativeId')?.value.trim() || GOOGLE_ADMOB_TEST_IDS.nativeId;
   const isTestMode = document.getElementById('cfgAdmobTestMode')?.checked ?? true;
 
   try {
@@ -5509,13 +5521,16 @@ async function saveAdmobConfig() {
       body: JSON.stringify({
         bannerEnabled,
         interstitialEnabled,
+        nativeEnabled,
         rewardedInterval,
         interstitialInterval,
+        nativeInterval,
         appId,
         bannerId,
         interstitialId,
         rewardedId,
         appOpenId,
+        nativeId,
         isTestMode
       })
     });

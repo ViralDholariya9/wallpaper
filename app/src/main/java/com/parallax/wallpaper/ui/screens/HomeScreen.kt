@@ -98,9 +98,11 @@ import com.parallax.wallpaper.model.WallpaperItem
 import com.parallax.wallpaper.ui.components.CategoryExplorerSheet
 import com.parallax.wallpaper.ui.components.DailyWallpaperCard
 import com.parallax.wallpaper.ui.components.HeroBannerCarousel
+import com.parallax.wallpaper.ui.components.NativeAdCard
 import com.parallax.wallpaper.ui.components.ParallaxCard
 import com.parallax.wallpaper.ui.components.PersonalizationSuiteHub
 import com.parallax.wallpaper.ui.components.rememberFlagshipFeatures
+import com.parallax.wallpaper.utils.MonetizationManager
 import com.parallax.wallpaper.ui.theme.CardBorder
 import com.parallax.wallpaper.ui.theme.CardDark
 import com.parallax.wallpaper.ui.theme.DeepObsidian
@@ -1143,13 +1145,26 @@ fun HomeScreen(
                     }
                 }
 
-                items(normalFilteredWallpapers, key = { it.id }) { item ->
-                    ParallaxCard(
-                        wallpaper = item,
-                        isFavorite = favorites.contains(item.id),
-                        onWallpaperClick = { onWallpaperClick(item) },
-                        onFavoriteClick = { repository.toggleFavorite(item.id) }
-                    )
+                val isNativeEnabled = MonetizationManager.isNativeEnabled(remoteConfig?.admob)
+                val nativeInterval = MonetizationManager.getNativeInterval(remoteConfig?.admob)
+
+                normalFilteredWallpapers.forEachIndexed { index, item ->
+                    if (isNativeEnabled && index > 0 && index % nativeInterval == 0) {
+                        item(span = { GridItemSpan(2) }, key = "native_ad_feed_$index") {
+                            NativeAdCard(
+                                config = remoteConfig?.admob,
+                                modifier = Modifier.padding(vertical = 4.dp)
+                            )
+                        }
+                    }
+                    item(key = item.id) {
+                        ParallaxCard(
+                            wallpaper = item,
+                            isFavorite = favorites.contains(item.id),
+                            onWallpaperClick = { onWallpaperClick(item) },
+                            onFavoriteClick = { repository.toggleFavorite(item.id) }
+                        )
+                    }
                 }
 
                 // Loading Shimmer / Footer for Infinite Scrolling

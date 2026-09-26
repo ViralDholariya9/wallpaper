@@ -74,13 +74,16 @@ data class AnnouncementConfigResponse(
 data class AdmobConfigResponse(
     @SerializedName("bannerEnabled") val bannerEnabled: Boolean = true,
     @SerializedName("interstitialEnabled") val interstitialEnabled: Boolean = true,
+    @SerializedName("nativeEnabled") val nativeEnabled: Boolean = true,
     @SerializedName("rewardedInterval") val rewardedInterval: Int = 3,
     @SerializedName("interstitialInterval") val interstitialInterval: Int = 3,
+    @SerializedName("nativeInterval") val nativeInterval: Int = 6,
     @SerializedName("appId") val appId: String = "ca-app-pub-3940256099942544~3347511713",
     @SerializedName("bannerId") val bannerId: String = "ca-app-pub-3940256099942544/6300978111",
     @SerializedName("interstitialId") val interstitialId: String = "ca-app-pub-3940256099942544/1033173712",
     @SerializedName("rewardedId") val rewardedId: String = "ca-app-pub-3940256099942544/5224354917",
     @SerializedName("appOpenId") val appOpenId: String = "ca-app-pub-3940256099942544/9257395921",
+    @SerializedName("nativeId") val nativeId: String = "ca-app-pub-3940256099942544/2247696110",
     @SerializedName("isTestMode") val isTestMode: Boolean = true
 )
 

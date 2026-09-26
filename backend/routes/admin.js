@@ -1029,26 +1029,32 @@ router.post('/admob', verifyAdminToken, async (req, res) => {
     const {
       bannerEnabled,
       interstitialEnabled,
+      nativeEnabled,
       rewardedInterval,
       interstitialInterval,
+      nativeInterval,
       appId,
       bannerId,
       interstitialId,
       rewardedId,
       appOpenId,
+      nativeId,
       isTestMode
     } = req.body;
 
     const pairs = [
       ['admob_banner_enabled', bannerEnabled ? 'true' : 'false'],
       ['admob_interstitial_enabled', interstitialEnabled ? 'true' : 'false'],
+      ['admob_native_enabled', nativeEnabled ? 'true' : 'false'],
       ['admob_rewarded_interval', String(parseInt(rewardedInterval, 10) || 3)],
       ['admob_interstitial_interval', String(parseInt(interstitialInterval, 10) || 3)],
+      ['admob_native_interval', String(parseInt(nativeInterval, 10) || 6)],
       ['admob_app_id', appId || 'ca-app-pub-3940256099942544~3347511713'],
       ['admob_banner_id', bannerId || 'ca-app-pub-3940256099942544/6300978111'],
       ['admob_interstitial_id', interstitialId || 'ca-app-pub-3940256099942544/1033173712'],
       ['admob_rewarded_id', rewardedId || 'ca-app-pub-3940256099942544/5224354917'],
       ['admob_app_open_id', appOpenId || 'ca-app-pub-3940256099942544/9257395921'],
+      ['admob_native_id', nativeId || 'ca-app-pub-3940256099942544/2247696110'],
       ['admob_is_test_mode', isTestMode ? 'true' : 'false']
     ];
 

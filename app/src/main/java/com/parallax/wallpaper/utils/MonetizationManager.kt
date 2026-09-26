@@ -24,6 +24,7 @@ object MonetizationManager {
     const val GOOGLE_TEST_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712"
     const val GOOGLE_TEST_REWARDED_ID = "ca-app-pub-3940256099942544/5224354917"
     const val GOOGLE_TEST_APP_OPEN_ID = "ca-app-pub-3940256099942544/9257395921"
+    const val GOOGLE_TEST_NATIVE_ID = "ca-app-pub-3940256099942544/2247696110"
 
     private fun getPrefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -69,6 +70,14 @@ object MonetizationManager {
     }
 
     /**
+     * Resolves the active Native Advanced Ad Unit ID.
+     */
+    fun getNativeAdUnitId(config: AdmobConfigResponse?): String {
+        if (isTestMode(config)) return GOOGLE_TEST_NATIVE_ID
+        return config?.nativeId?.takeIf { it.isNotBlank() } ?: GOOGLE_TEST_NATIVE_ID
+    }
+
+    /**
      * Checks if current AdMob monetization is operating in Test Mode.
      */
     fun isTestMode(config: AdmobConfigResponse?): Boolean {
@@ -90,6 +99,20 @@ object MonetizationManager {
      */
     fun isInterstitialEnabled(config: AdmobConfigResponse?): Boolean {
         return config?.interstitialEnabled ?: true
+    }
+
+    /**
+     * Checks if native ads are globally enabled in remote configuration.
+     */
+    fun isNativeEnabled(config: AdmobConfigResponse?): Boolean {
+        return config?.nativeEnabled ?: true
+    }
+
+    /**
+     * Gets native ad frequency interval (e.g. show 1 ad every N items).
+     */
+    fun getNativeInterval(config: AdmobConfigResponse?): Int {
+        return (config?.nativeInterval ?: 6).coerceAtLeast(2)
     }
 
     /**

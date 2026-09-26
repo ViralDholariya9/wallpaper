@@ -910,6 +910,21 @@
                       </label>
                     </div>
 
+                    <!-- Native Ads Toggle -->
+                    <div class="admob-toggle-card">
+                      <div class="admob-toggle-info">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                          <span style="font-size:16px;">🖼️</span>
+                          <span style="font-weight:700; font-size:13px; color:#fff;">Native Ads</span>
+                        </div>
+                        <p style="font-size:11px; color:var(--text-muted); margin:2px 0 0;">In-feed native cards in grid & detail</p>
+                      </div>
+                      <label class="switch">
+                        <input type="checkbox" id="cfgNative" checked>
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+
                     <!-- Test Mode Toggle -->
                     <div class="admob-toggle-card">
                       <div class="admob-toggle-info">
@@ -930,26 +945,39 @@
                   <div class="form-row mt-14">
                     <div class="form-group flex-1">
                       <label>
-                        ⏱️ Interstitial Frequency Capping (Ad Frequency)
-                        <span style="color:var(--accent-cyan); font-weight:normal; font-size:11px;">(Recommended: Every 3 Views)</span>
+                        ⏱️ Interstitial Frequency Capping
+                        <span style="color:var(--accent-cyan); font-weight:normal; font-size:11px;">(Ad Frequency)</span>
                       </label>
                       <select id="cfgInterstitialInterval" class="select-filter" style="width:100%;">
-                        <option value="2">Show Interstitial Every 2 Wallpaper Views (Aggressive Monetization)</option>
-                        <option value="3" selected>Show Interstitial Every 3 Wallpaper Views (Balanced ⭐ Recommended)</option>
-                        <option value="4">Show Interstitial Every 4 Wallpaper Views (Smooth Flow)</option>
-                        <option value="5">Show Interstitial Every 5 Wallpaper Views (User Friendly)</option>
-                        <option value="8">Show Interstitial Every 8 Wallpaper Views (Minimal Ads)</option>
+                        <option value="2">Show Interstitial Every 2 Views (Aggressive)</option>
+                        <option value="3" selected>Show Interstitial Every 3 Views (Balanced ⭐)</option>
+                        <option value="4">Show Interstitial Every 4 Views (Smooth)</option>
+                        <option value="5">Show Interstitial Every 5 Views (Gentle)</option>
+                        <option value="8">Show Interstitial Every 8 Views (Minimal)</option>
                       </select>
                       <small style="color:var(--text-muted); font-size:11px; margin-top:3px; display:block;">
-                        Controls how frequently full-screen interstitial ads appear when browsing wallpapers.
+                        Controls how frequently full-screen interstitial ads appear.
                       </small>
                     </div>
 
                     <div class="form-group flex-1">
-                      <label>🎁 Rewarded Ad Interval (Premium Locks per Ad)</label>
+                      <label>🖼️ Native Ad Feed Frequency</label>
+                      <select id="cfgNativeInterval" class="select-filter" style="width:100%;">
+                        <option value="4">Show 1 Native Ad Every 4 Wallpapers (High Fill)</option>
+                        <option value="6" selected>Show 1 Native Ad Every 6 Wallpapers (Optimal ⭐)</option>
+                        <option value="8">Show 1 Native Ad Every 8 Wallpapers (Clean Layout)</option>
+                        <option value="10">Show 1 Native Ad Every 10 Wallpapers (Low Ads)</option>
+                      </select>
+                      <small style="color:var(--text-muted); font-size:11px; margin-top:3px; display:block;">
+                        Injects seamless native card ad into wallpaper grid browsing.
+                      </small>
+                    </div>
+
+                    <div class="form-group flex-1">
+                      <label>🎁 Rewarded Ad Interval (Locks per Ad)</label>
                       <input type="number" id="cfgRewardedInterval" min="1" max="10" value="3">
                       <small style="color:var(--text-muted); font-size:11px; margin-top:3px; display:block;">
-                        Number of premium wallpapers unlocked after user completes 1 rewarded video ad.
+                        Number of premium wallpapers unlocked after 1 rewarded video ad.
                       </small>
                     </div>
                   </div>
@@ -1021,6 +1049,18 @@
                         <div class="admob-input-wrap">
                           <input type="text" id="cfgAdmobAppOpenId" placeholder="ca-app-pub-3940256099942544/9257395921" value="ca-app-pub-3940256099942544/9257395921">
                           <button type="button" class="btn-copy-unit" onclick="copyAdmobUnit('cfgAdmobAppOpenId')" title="Copy ID">📋</button>
+                        </div>
+                      </div>
+
+                      <!-- Field 6: Native Advanced ID -->
+                      <div class="admob-unit-card">
+                        <div class="admob-unit-header">
+                          <span class="admob-unit-title">Native Ad Unit ID</span>
+                          <span class="badge-pill" style="font-size:10px; background:rgba(59,130,246,0.15); color:#60a5fa;">In-Feed Card</span>
+                        </div>
+                        <div class="admob-input-wrap">
+                          <input type="text" id="cfgAdmobNativeId" placeholder="ca-app-pub-3940256099942544/2247696110" value="ca-app-pub-3940256099942544/2247696110">
+                          <button type="button" class="btn-copy-unit" onclick="copyAdmobUnit('cfgAdmobNativeId')" title="Copy ID">📋</button>
                         </div>
                       </div>
                     </div>
@@ -5531,6 +5571,6 @@
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
 
-  <script src="app.js?v=1.7.4"></script>
+  <script src="app.js?v=1.7.5"></script>
 </body>
 </html>
