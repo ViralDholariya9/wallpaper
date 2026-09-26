@@ -31,9 +31,12 @@ app.get('/', (req, res) => {
 app.use('/api', apiRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+// Health & Ping check (ultra-lightweight for cron pingers like cron-job.org)
+app.all(['/health', '/ping'], (req, res) => {
+  if (req.method === 'HEAD') {
+    return res.status(200).set('Content-Length', '0').end();
+  }
+  res.status(200).set('Content-Type', 'text/plain').send('OK');
 });
 
 // Helper to find local IPv4 address
