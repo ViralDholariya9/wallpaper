@@ -32,6 +32,95 @@ async function authFetch(url, options = {}) {
   return response;
 }
 
+/**
+ * Global In-App Confirmation Dialog (Replaces fragile window.confirm)
+ * Never blocked by browser dialog suppression policies.
+ */
+function showAppConfirm({
+  title = 'Confirm Action',
+  message = 'Are you sure you want to proceed?',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  isDanger = false
+} = {}) {
+  return new Promise((resolve) => {
+    let modal = document.getElementById('globalConfirmModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.className = 'modal-backdrop';
+      modal.id = 'globalConfirmModal';
+      modal.innerHTML = `
+        <div class="modal-dialog" style="max-width: 440px; border-color: rgba(0, 229, 255, 0.4); box-shadow: 0 0 35px rgba(0, 0, 0, 0.6);">
+          <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px;">
+            <h3 id="globalConfirmTitle" style="display: flex; align-items: center; gap: 8px; font-size: 17px;">
+              <span>⚠️</span> <span>Confirm Action</span>
+            </h3>
+            <button class="modal-close" id="globalConfirmClose">&times;</button>
+          </div>
+          <div class="modal-body" style="padding: 20px 0;">
+            <p id="globalConfirmMessage" style="font-size: 14px; color: #f1f5f9; line-height: 1.5; margin: 0;"></p>
+          </div>
+          <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+            <button type="button" class="btn btn-secondary" id="globalConfirmCancel">Cancel</button>
+            <button type="button" class="btn btn-primary" id="globalConfirmOk">Confirm</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    const titleEl = document.getElementById('globalConfirmTitle');
+    const msgEl = document.getElementById('globalConfirmMessage');
+    const okBtn = document.getElementById('globalConfirmOk');
+    const cancelBtn = document.getElementById('globalConfirmCancel');
+    const closeBtn = document.getElementById('globalConfirmClose');
+    const dialog = modal.querySelector('.modal-dialog');
+
+    if (titleEl) {
+      titleEl.innerHTML = `<span>${isDanger ? '🗑️' : '⚠️'}</span> <span>${title}</span>`;
+      titleEl.style.color = isDanger ? '#ef4444' : '#00E5FF';
+    }
+    if (dialog) {
+      dialog.style.borderColor = isDanger ? 'rgba(239, 68, 68, 0.4)' : 'rgba(0, 229, 255, 0.4)';
+      dialog.style.boxShadow = isDanger ? '0 0 35px rgba(239, 68, 68, 0.25)' : '0 0 35px rgba(0, 229, 255, 0.2)';
+    }
+    if (msgEl) msgEl.textContent = message;
+
+    if (okBtn) {
+      okBtn.textContent = confirmText;
+      if (isDanger) {
+        okBtn.className = 'btn btn-danger';
+        okBtn.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+        okBtn.style.border = 'none';
+        okBtn.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4)';
+      } else {
+        okBtn.className = 'btn btn-primary';
+        okBtn.style.background = '';
+        okBtn.style.border = '';
+        okBtn.style.boxShadow = '';
+      }
+    }
+    if (cancelBtn) cancelBtn.textContent = cancelText;
+
+    const cleanup = (result) => {
+      modal.classList.remove('active');
+      okBtn.onclick = null;
+      cancelBtn.onclick = null;
+      closeBtn.onclick = null;
+      resolve(result);
+    };
+
+    okBtn.onclick = () => cleanup(true);
+    cancelBtn.onclick = () => cleanup(false);
+    closeBtn.onclick = () => cleanup(false);
+    modal.onclick = (e) => {
+      if (e.target === modal) cleanup(false);
+    };
+
+    modal.classList.add('active');
+  });
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
@@ -2100,14 +2189,22 @@ document.getElementById('wallpaperForm').addEventListener('submit', async (e) =>
 });
 
 async function deleteWallpaper(id) {
-  if (!confirm(`Are you sure you want to delete wallpaper ${id}?`)) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Wallpaper',
+    message: `Are you sure you want to permanently delete wallpaper ${id}?`,
+    confirmText: '🗑️ Delete Wallpaper',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/wallpapers/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/wallpapers/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Wallpaper deleted');
       await loadWallpapers();
       await loadStats();
+    } else {
+      showToast(json.error || 'Failed to delete wallpaper');
     }
   } catch (err) {
     alert('Error: ' + err.message);
@@ -2144,14 +2241,22 @@ document.getElementById('ringtoneForm').addEventListener('submit', async (e) => 
 });
 
 async function deleteRingtone(id) {
-  if (!confirm('Are you sure you want to delete this ringtone?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Ringtone',
+    message: 'Are you sure you want to permanently delete this ringtone?',
+    confirmText: '🗑️ Delete Ringtone',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/ringtones/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/ringtones/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Ringtone deleted');
       await loadRingtones();
       await loadStats();
+    } else {
+      showToast(json.error || 'Failed to delete ringtone');
     }
   } catch (err) {
     alert('Error: ' + err.message);
@@ -2560,13 +2665,21 @@ async function loadNotifications() {
 }
 
 async function deleteNotification(id) {
-  if (!confirm('Delete this broadcast log?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Notification',
+    message: 'Are you sure you want to delete this broadcast log?',
+    confirmText: '🗑️ Delete Log',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/notifications/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/notifications/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Notification log deleted');
       await loadNotifications();
+    } else {
+      showToast(json.error || 'Failed to delete notification');
     }
   } catch (err) {
     alert('Error: ' + err.message);
@@ -2986,7 +3099,13 @@ function downloadServerSnapshot(filename) {
 
 // Global Delete Server Snapshot
 async function deleteServerSnapshot(filename) {
-  if (!confirm(`Are you sure you want to delete snapshot "${filename}"?`)) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Snapshot',
+    message: `Are you sure you want to permanently delete snapshot "${filename}"?`,
+    confirmText: '🗑️ Delete Snapshot',
+    isDanger: true
+  });
+  if (!confirmed) return;
 
   try {
     const res = await authFetch(`/api/admin/backup/snapshots/${encodeURIComponent(filename)}`, {
@@ -4583,10 +4702,16 @@ window.toggleBannerActive = async function(id) {
 window.deleteBanner = async function(id) {
   const banner = allHeroBanners.find(b => b.id === id);
   const name = banner ? banner.title : 'this banner';
-  if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Hero Banner',
+    message: `Are you sure you want to delete "${name}"?`,
+    confirmText: '🗑️ Delete Banner',
+    isDanger: true
+  });
+  if (!confirmed) return;
 
   try {
-    const res = await authFetch(`/api/admin/banners/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/banners/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Hero banner deleted successfully');
@@ -4986,10 +5111,16 @@ window.toggleTrendingTagActive = async function(id) {
 window.deleteTrendingTag = async function(id) {
   const tagObj = allTrendingTags.find(t => t.id === id);
   const name = tagObj ? tagObj.tag : 'this tag';
-  if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Trending Tag',
+    message: `Are you sure you want to delete "${name}"?`,
+    confirmText: '🗑️ Delete Tag',
+    isDanger: true
+  });
+  if (!confirmed) return;
 
   try {
-    const res = await authFetch(`/api/admin/trending-tags/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/trending-tags/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Trending tag deleted');
@@ -6196,9 +6327,15 @@ window.openEditChargingModal = function(id) {
 
 // Delete Animation
 window.deleteChargingAnimation = async function(id) {
-  if (!confirm('Are you sure you want to delete this charging animation?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Charging Animation',
+    message: 'Are you sure you want to permanently delete this charging animation?',
+    confirmText: '🗑️ Delete Animation',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/charging-animations/${id}`, {
+    const res = await authFetch(`/api/admin/charging-animations/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     });
     const json = await res.json();
@@ -6210,7 +6347,7 @@ window.deleteChargingAnimation = async function(id) {
         loadInSimulator(allChargingAnimations[0]);
       }
     } else {
-      showToast('Error: ' + json.error);
+      showToast('Error: ' + (json.error || 'Failed to delete'));
     }
   } catch (err) {
     showToast('Failed to delete animation');
@@ -7525,9 +7662,15 @@ async function toggleIslandActive(id) {
 }
 
 async function deleteIslandTheme(id) {
-  if (!confirm('Are you sure you want to delete this Dynamic Island theme?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Dynamic Island Theme',
+    message: 'Are you sure you want to delete this Dynamic Island theme?',
+    confirmText: '🗑️ Delete Theme',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/dynamic-island/themes/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/dynamic-island/themes/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Theme deleted successfully');
@@ -8167,9 +8310,15 @@ async function toggleAodActive(id) {
 }
 
 async function deleteAodClock(id) {
-  if (!confirm('Are you sure you want to delete this AOD clock face?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete AOD Clock Face',
+    message: 'Are you sure you want to delete this AOD clock face?',
+    confirmText: '🗑️ Delete Clock',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/aod/clocks/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/aod/clocks/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('AOD Clock Face deleted successfully');
@@ -8690,7 +8839,13 @@ async function toggleCallThemeActive(id) {
 }
 
 async function deleteCallTheme(id) {
-  if (!confirm('Are you sure you want to delete this Call Screen theme?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Call Screen Theme',
+    message: 'Are you sure you want to delete this Call Screen theme?',
+    confirmText: '🗑️ Delete Theme',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
     const res = await authFetch(`/api/admin/call-screen/themes/${id}`, { method: 'DELETE' });
     const json = await res.json();
@@ -9113,7 +9268,13 @@ async function toggleDuoActive(id) {
 }
 
 async function deleteDuoPair(id) {
-  if (!confirm('Are you sure you want to delete this Duo Wallpaper pair?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Duo Wallpaper Pair',
+    message: 'Are you sure you want to delete this Duo Wallpaper pair?',
+    confirmText: '🗑️ Delete Pair',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
     const res = await authFetch(`/api/admin/duo/wallpapers/${id}`, { method: 'DELETE' });
     const json = await res.json();
@@ -9786,7 +9947,13 @@ async function toggleTouchPresetActive(id) {
 }
 
 async function deleteTouchPreset(id) {
-  if (!confirm('Are you sure you want to delete this Touch Effect preset?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Touch Effect Preset',
+    message: 'Are you sure you want to delete this Touch Effect preset?',
+    confirmText: '🗑️ Delete Preset',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
     const res = await authFetch(`/api/admin/touch-effects/presets/${id}`, { method: 'DELETE' });
     const json = await res.json();
@@ -10519,9 +10686,15 @@ async function toggleFingerprintPresetActive(id) {
 }
 
 async function deleteFingerprintPreset(id) {
-  if (!confirm('Are you sure you want to delete this Fingerprint Animation preset?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Fingerprint Preset',
+    message: 'Are you sure you want to delete this Fingerprint Animation preset?',
+    confirmText: '🗑️ Delete Preset',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/fingerprint/presets/${id}`, { method: 'DELETE' });
+    const res = await authFetch(`/api/admin/fingerprint/presets/${encodeURIComponent(id)}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('Fingerprint preset deleted successfully');
@@ -12603,9 +12776,15 @@ async function toggleFestivalActive(id) {
 }
 
 async function deleteFestivalEvent(id) {
-  if (!confirm('Are you sure you want to delete this scheduled festival event?')) return;
+  const confirmed = await showAppConfirm({
+    title: 'Delete Festival Event',
+    message: 'Are you sure you want to delete this scheduled festival event?',
+    confirmText: '🗑️ Delete Event',
+    isDanger: true
+  });
+  if (!confirmed) return;
   try {
-    const res = await authFetch(`/api/admin/events/${id}`, {
+    const res = await authFetch(`/api/admin/events/${encodeURIComponent(id)}`, {
       method: 'DELETE'
     });
     const json = await res.json();
