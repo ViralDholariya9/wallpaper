@@ -4623,15 +4623,27 @@ function initHeroBanners() {
 
   if (addBtn) {
     addBtn.addEventListener('click', () => {
-      document.getElementById('modalBannerTitle').textContent = 'Add Hero Banner';
-      form.reset();
-      document.getElementById('bannerIdInput').value = '';
-      document.getElementById('bannerSortOrderInput').value = (allHeroBanners.length + 1);
-      document.getElementById('bannerBadgeInput').value = '🔥 FESTIVAL SPECIAL';
-      document.getElementById('bannerIsActiveCheck').checked = true;
-      document.getElementById('bannerImagePreviewBox').style.display = 'none';
-      updateBannerActionTargetOptions('category', allCategories[0]?.name || '');
-      modal.classList.add('active');
+      try {
+        const titleEl = document.getElementById('modalBannerTitle');
+        if (titleEl) titleEl.textContent = 'Add Hero Banner';
+        if (form) form.reset();
+        const idInput = document.getElementById('bannerIdInput');
+        if (idInput) idInput.value = '';
+        const sortInput = document.getElementById('bannerSortOrderInput');
+        if (sortInput) sortInput.value = (allHeroBanners.length + 1);
+        const badgeInput = document.getElementById('bannerBadgeInput');
+        if (badgeInput) badgeInput.value = '🔥 FESTIVAL SPECIAL';
+        const activeCheck = document.getElementById('bannerIsActiveCheck');
+        if (activeCheck) activeCheck.checked = true;
+        const prevBox = document.getElementById('bannerImagePreviewBox');
+        if (prevBox) prevBox.style.display = 'none';
+        updateBannerActionTargetOptions('category', allCategories[0]?.name || '');
+      } catch (err) {
+        console.error('Error preparing banner modal:', err);
+      }
+      if (modal) {
+        modal.classList.add('active');
+      }
     });
   }
 
@@ -10523,6 +10535,7 @@ let suiteDragSrcIndex = null;
 async function loadPersonalizationSuite() {
   try {
     const res = await authFetch('/api/admin/personalization-suite');
+    const json = await res.json();
     const items = json.data || json.items;
     if (json.success && Array.isArray(items)) {
       suiteItems = items.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
