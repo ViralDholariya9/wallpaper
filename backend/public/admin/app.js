@@ -6975,6 +6975,38 @@ async function toggleEdgeActive(id) {
   }
 }
 
+async function deleteEdgePreset(id) {
+  const preset = allEdgePresets.find(p => p.id === id);
+  const name = preset ? preset.title : 'this Edge Lighting preset';
+  const confirmed = await showAppConfirm({
+    title: 'Delete Edge Lighting Preset',
+    message: `Are you sure you want to permanently delete "${name}"?`,
+    confirmText: '🗑️ Delete Preset',
+    isDanger: true
+  });
+  if (!confirmed) return;
+
+  try {
+    const res = await authFetch(`/api/admin/edge-lighting/${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast(json.message || 'Edge lighting preset deleted successfully');
+      allEdgePresets = allEdgePresets.filter(p => p.id !== id);
+      renderEdgeLightingCatalog();
+      if (activeEdgeSimPreset && activeEdgeSimPreset.id === id && allEdgePresets.length > 0) {
+        selectEdgePresetForSim(allEdgePresets[0]);
+      }
+    } else {
+      showToast('Error: ' + (json.error || 'Failed to delete'));
+    }
+  } catch (err) {
+    showToast('Failed to delete preset: ' + err.message);
+  }
+}
+window.deleteEdgePreset = deleteEdgePreset;
+
 // ========================================================
 // 🏝️ DYNAMIC ISLAND STUDIO & CAPSULE SIMULATOR CONTROLLER
 // ========================================================
