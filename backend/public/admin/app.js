@@ -862,9 +862,21 @@ function populateCategoryDropdowns() {
   const modalSelect = document.getElementById('wpCategory');
   const bulkSelect = document.getElementById('bulkCategory');
 
+  const currentFilterVal = filter ? filter.value : 'ALL';
+
   if (filter) {
-    filter.innerHTML = '<option value="ALL">All Categories</option>' +
-      allCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    const totalCount = allWallpapers.length;
+    filter.innerHTML = `<option value="ALL">All Categories (${totalCount})</option>` +
+      allCategories.map(c => {
+        const catCount = allWallpapers.filter(w => {
+          const wCat = (w.category || '').toLowerCase().trim();
+          return w.category === c.id || w.category === c.name || wCat === c.id.toLowerCase().trim() || wCat === c.name.toLowerCase().trim();
+        }).length;
+        return `<option value="${c.id}">${c.name} (${catCount})</option>`;
+      }).join('');
+    if (currentFilterVal && Array.from(filter.options).some(o => o.value === currentFilterVal)) {
+      filter.value = currentFilterVal;
+    }
   }
 
   if (modalSelect) {
@@ -889,7 +901,7 @@ let lastCheckedWallpaperIndex = null;
 
 async function loadWallpapers() {
   try {
-    const res = await fetch('/api/wallpapers?limit=100');
+    const res = await fetch('/api/wallpapers?limit=500');
     const json = await res.json();
     if (json.success) {
       allWallpapers = json.data;
@@ -928,12 +940,19 @@ function renderWallpapersTable() {
   const catVal = document.getElementById('wallCategoryFilter').value;
   const typeVal = document.getElementById('wallTypeFilter').value;
 
-  const catObj = allCategories.find(c => c.id === catVal || c.name === catVal);
+  const catObj = allCategories.find(c => c.id === catVal || c.name === catVal || c.id.toLowerCase() === catVal.toLowerCase());
   currentFilteredWallpapers = allWallpapers.filter(w => {
     const matchesSearch = w.title.toLowerCase().includes(searchVal) || w.id.toLowerCase().includes(searchVal);
+    const wCat = (w.category || '').toLowerCase().trim();
     const matchesCat = catVal === 'ALL' || 
       w.category === catVal || 
-      (catObj && (w.category === catObj.id || w.category === catObj.name || (w.category && w.category.toLowerCase() === catObj.name.toLowerCase())));
+      wCat === catVal.toLowerCase().trim() ||
+      (catObj && (
+        w.category === catObj.id || 
+        w.category === catObj.name || 
+        wCat === catObj.name.toLowerCase().trim() || 
+        wCat === catObj.id.toLowerCase().trim()
+      ));
     const matchesType = typeVal === 'ALL' ||
       (typeVal === 'PARALLAX' && w.isParallax) ||
       (typeVal === 'TWO_D' && !w.isParallax);
@@ -942,6 +961,8 @@ function renderWallpapersTable() {
 
   tbody.innerHTML = currentFilteredWallpapers.map((w, idx) => {
     const isChecked = selectedWallpaperIds.has(w.id);
+    const matchedCategory = allCategories.find(c => c.id === w.category || c.name === w.category || c.id.toLowerCase() === (w.category || '').toLowerCase() || c.name.toLowerCase() === (w.category || '').toLowerCase());
+    const displayCategoryName = matchedCategory ? matchedCategory.name : w.category;
     return `
       <tr class="${isChecked ? 'table-row-selected' : ''}" id="row-wp-${w.id}">
         <td style="text-align: center;">
@@ -952,7 +973,7 @@ function renderWallpapersTable() {
           <strong>${w.title}</strong>
           <div style="font-size:11px; color:#8E99B0;">ID: ${w.id}</div>
         </td>
-        <td><span class="badge badge-purple">${w.category}</span></td>
+        <td><span class="badge badge-purple">${displayCategoryName}</span></td>
         <td>
           ${w.isParallax 
             ? `<span class="badge badge-cyan">3D (${w.layers ? w.layers.length : 0} Layers)</span>` 

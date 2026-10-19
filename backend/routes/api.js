@@ -159,7 +159,12 @@ router.get('/categories', async (req, res) => {
       GROUP BY c.id 
       ORDER BY c.name ASC
     `);
-    res.json({ success: true, data: categories });
+    const mapped = (categories || []).map(c => ({
+      ...c,
+      count: c.count || 0,
+      wallpaperCount: c.count || 0
+    }));
+    res.json({ success: true, data: mapped });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
