@@ -66,6 +66,7 @@ import com.parallax.wallpaper.ui.screens.RingtonesScreen
 import com.parallax.wallpaper.ui.screens.SettingsScreen
 import com.parallax.wallpaper.ui.screens.StatusSaverScreen
 import com.parallax.wallpaper.ui.theme.CardBorder
+import com.parallax.wallpaper.ui.theme.CardDark
 import com.parallax.wallpaper.ui.theme.DeepObsidian
 import com.parallax.wallpaper.ui.theme.NeonCyan
 import com.parallax.wallpaper.ui.theme.NeonPurple
@@ -76,7 +77,24 @@ import com.parallax.wallpaper.ui.theme.TextSecondary
 import com.parallax.wallpaper.visualizer.MusicVisualizerManager
 import com.parallax.wallpaper.ui.theme.ThemeManager
 import com.parallax.wallpaper.work.DailyWallpaperWorker
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 enum class NavTab(
@@ -112,18 +130,49 @@ class MainActivity : ComponentActivity() {
         DailyWallpaperWorker.scheduleDaily(this)
         syncDeviceTelemetry()
         com.parallax.wallpaper.data.RemoteConfigManager.sync(this)
+        com.parallax.wallpaper.ads.VentureAdsManager.init(this)
+        com.parallax.wallpaper.ads.AdMobManager.init(this)
+        com.parallax.wallpaper.ads.AdMobManager.checkAndRequestConsent(this)
+        com.parallax.wallpaper.analytics.AnalyticsManager.init(this)
+        com.parallax.wallpaper.utils.InAppUpdateManager.init(this)
+        com.parallax.wallpaper.utils.InAppUpdateManager.checkForUpdates(this, immediateIfAvailable = false)
 
         handleIncomingIntent(intent)
 
         setContent {
             val themeMode by ThemeManager.themeMode.collectAsState()
+            var showSplash by remember {
+                mutableStateOf(intent?.action != ACTION_LIVE_TEST && intent?.getStringExtra("preview_type") == null)
+            }
+
             ParallaxWallpaperTheme(themeMode = themeMode) {
-                MainAppContent(
-                    repository = repository,
-                    liveTestWallpaperFlow = liveTestWallpaper
-                )
+                if (showSplash) {
+                    com.parallax.wallpaper.ui.screens.SplashScreen(
+                        onSplashFinished = {
+                            showSplash = false
+                        }
+                    )
+                } else {
+                    MainAppContent(
+                        repository = repository,
+                        liveTestWallpaperFlow = liveTestWallpaper
+                    )
+                }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        repository.refreshWallpapersSilently()
+        com.parallax.wallpaper.data.RemoteConfigManager.sync(this)
+        com.parallax.wallpaper.ads.VentureAdsManager.sync(this)
+        com.parallax.wallpaper.utils.InAppUpdateManager.onResume(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        com.parallax.wallpaper.utils.InAppUpdateManager.onDestroy()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -172,6 +221,12 @@ class MainActivity : ComponentActivity() {
                     }
                     startActivity(aodIntent)
                 }
+                "charging" -> {
+                    val chargingIntent = Intent(this, com.parallax.wallpaper.charging.ChargingActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    }
+                    startActivity(chargingIntent)
+                }
             }
         }
     }
@@ -189,11 +244,6 @@ class MainActivity : ComponentActivity() {
             )
         }
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        com.parallax.wallpaper.data.RemoteConfigManager.sync(this)
     }
 
     private fun syncDeviceTelemetry() {
@@ -288,6 +338,48 @@ fun MainAppContent(
     var showWeatherDialog by remember { mutableStateOf(false) }
     var showVisualizerDialog by remember { mutableStateOf(false) }
     var showCategoryExplorerDirectly by remember { mutableStateOf(false) }
+    val activity = context as? androidx.activity.ComponentActivity
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    val hasAnyOverlayOpen = selectedWallpaper != null ||
+        showRingtonesScreen || showStatusSaverScreen || showChargingScreen ||
+        selectedChargingAnimForPreview != null || showEdgeLightingScreen ||
+        showDynamicIslandScreen || showAodScreen || showCallScreenScreen ||
+        showDuoWallpaperScreen || showTouchEffectsScreen || showFingerprintScreen ||
+        showAiWallpaperScreen || show3DMakerScreen || showWeatherDialog || showVisualizerDialog
+
+    androidx.activity.compose.BackHandler(enabled = !hasAnyOverlayOpen && currentTab == NavTab.EXPLORE) {
+        showExitDialog = true
+    }
+
+    if (showExitDialog) {
+        com.parallax.wallpaper.ads.ExitDialog(
+            onDismiss = { showExitDialog = false },
+            onConfirmExit = {
+                showExitDialog = false
+                activity?.finish()
+            }
+        )
+    }
+
+    // Remote Server Status Checks (Maintenance, Move, Update)
+    val ventureAdsConfig by com.parallax.wallpaper.ads.VentureAdsManager.config.collectAsState()
+    var isUpdatePromptDismissed by remember { mutableStateOf(false) }
+
+    if (ventureAdsConfig.appMaintenance) {
+        com.parallax.wallpaper.ads.AppMaintenanceDialog(message = ventureAdsConfig.appMaintenanceMessage)
+    } else if (ventureAdsConfig.appUserMove) {
+        com.parallax.wallpaper.ads.AppUserMoveDialog(
+            message = ventureAdsConfig.appUserMoveMessage,
+            moveLink = ventureAdsConfig.appUserMoveLink
+        )
+    } else if (ventureAdsConfig.appUpdate >= 1 && !isUpdatePromptDismissed) {
+        com.parallax.wallpaper.ads.RemoteAppUpdateDialog(
+            message = ventureAdsConfig.appUpdateMessage,
+            isForce = (ventureAdsConfig.appUpdate == 2),
+            onDismiss = { isUpdatePromptDismissed = true }
+        )
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -352,30 +444,42 @@ fun MainAppContent(
             Scaffold(
                 bottomBar = {
                     if (selectedWallpaper == null) {
-                        NavigationBar(
-                            containerColor = SurfaceDark,
-                            contentColor = TextPrimary
-                        ) {
-                            NavTab.values().forEach { tab ->
-                                val isSelected = tab == currentTab
-                                NavigationBarItem(
-                                    selected = isSelected,
-                                    onClick = { currentTab = tab },
-                                    icon = {
-                                        Icon(
-                                            imageVector = if (isSelected) tab.selectedIcon else tab.unselectedIcon,
-                                            contentDescription = tab.title
+                        Column {
+                            // MainBottom / Bottombanner 3-Tier Waterfall Banner
+                            val mainBottomWaterfall = com.parallax.wallpaper.ads.VentureAdsManager.getMainBottomWaterfall()
+                            com.parallax.wallpaper.ads.AdMobManager.AdMobBanner(
+                                waterfallIds = mainBottomWaterfall,
+                                isMediumBanner = false,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(SurfaceDark)
+                            )
+
+                            NavigationBar(
+                                containerColor = SurfaceDark,
+                                contentColor = TextPrimary
+                            ) {
+                                NavTab.values().forEach { tab ->
+                                    val isSelected = tab == currentTab
+                                    NavigationBarItem(
+                                        selected = isSelected,
+                                        onClick = { currentTab = tab },
+                                        icon = {
+                                            Icon(
+                                                imageVector = if (isSelected) tab.selectedIcon else tab.unselectedIcon,
+                                                contentDescription = tab.title
+                                            )
+                                        },
+                                        label = { Text(text = tab.title) },
+                                        colors = NavigationBarItemDefaults.colors(
+                                            selectedIconColor = NeonCyan,
+                                            selectedTextColor = NeonCyan,
+                                            unselectedIconColor = TextSecondary,
+                                            unselectedTextColor = TextSecondary,
+                                            indicatorColor = NeonPurple.copy(alpha = 0.25f)
                                         )
-                                    },
-                                    label = { Text(text = tab.title) },
-                                    colors = NavigationBarItemDefaults.colors(
-                                        selectedIconColor = NeonCyan,
-                                        selectedTextColor = NeonCyan,
-                                        unselectedIconColor = TextSecondary,
-                                        unselectedTextColor = TextSecondary,
-                                        indicatorColor = NeonPurple.copy(alpha = 0.25f)
                                     )
-                                )
+                                }
                             }
                         }
                     }
@@ -571,6 +675,60 @@ fun MainAppContent(
             if (com.parallax.wallpaper.data.RemoteConfigManager.isForceUpdateRequired(context)) {
                 remoteConfig?.forceUpdate?.let { forceConfig ->
                     com.parallax.wallpaper.ui.components.ForceUpdateDialog(forceUpdateConfig = forceConfig)
+                }
+            }
+
+            // Google Play In-App Update Downloaded Banner
+            val isUpdateDownloaded by com.parallax.wallpaper.utils.InAppUpdateManager.isDownloaded.collectAsState()
+            if (isUpdateDownloaded) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 90.dp, start = 16.dp, end = 16.dp),
+                    contentAlignment = androidx.compose.ui.Alignment.BottomCenter
+                ) {
+                    androidx.compose.material3.Card(
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+                        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = CardDark),
+                        border = androidx.compose.foundation.BorderStroke(1.5.dp, NeonCyan),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        androidx.compose.foundation.layout.Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween
+                        ) {
+                            androidx.compose.foundation.layout.Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = "Update Ready! 🚀",
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                                        color = TextPrimary
+                                    )
+                                )
+                                Text(
+                                    text = "An update has finished downloading. Tap to restart and complete installation.",
+                                    style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
+                                )
+                            }
+                            androidx.compose.foundation.layout.Spacer(modifier = Modifier.size(12.dp))
+                            androidx.compose.material3.Button(
+                                onClick = { com.parallax.wallpaper.utils.InAppUpdateManager.completeUpdate() },
+                                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = NeonCyan),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp)
+                            ) {
+                                Text(
+                                    text = "Restart",
+                                    color = androidx.compose.ui.graphics.Color.Black,
+                                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

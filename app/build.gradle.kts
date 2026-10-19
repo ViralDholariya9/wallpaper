@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace = "com.parallax.wallpaper"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.omvagmine.wallpaper"
+        applicationId = "com.omvagmine.parallaxlivewallpaperrewall"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        targetSdk = 36
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -23,14 +23,11 @@ android {
     }
 
     signingConfigs {
-        // Template for Google Play Console Release Signing
-        // For production, configure keystore path and passwords via environment variables
-        // or a local release-keystore.properties file.
         create("release") {
-            storeFile = file("release-key.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "android"
-            keyAlias = System.getenv("KEY_ALIAS") ?: "androidkey"
-            keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+            storeFile = file("upload-keystore.jks")
+            storePassword = "Mahira@@0903"
+            keyAlias = "upload"
+            keyPassword = "Mahira@@0903"
         }
     }
 
@@ -42,12 +39,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Use release signing config if keystore file exists, else fallback to debug for local builds
-            signingConfig = if (file("release-key.jks").exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isDebuggable = true
@@ -99,9 +91,21 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // Firebase Cloud Messaging (FCM)
+    // Firebase Cloud Messaging (FCM) & Analytics
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
+
+    // Google Play Core: In-App Updates & In-App Reviews
+    implementation(libs.play.app.update)
+    implementation(libs.play.app.update.ktx)
+    implementation(libs.play.review)
+    // Google AdMob & User Messaging Platform (UMP Consent)
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.1.0")
+
+    // Chrome Custom Tabs (CCT) Support
+    implementation("androidx.browser:browser:1.8.0")
 
     debugImplementation(libs.androidx.ui.tooling)
 }
