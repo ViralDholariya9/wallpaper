@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSocialHub();
   initRatingPromptStudio();
   initAdmobStudio();
+  initCloudStorageForm();
   initChargingStudio();
   initEdgeLightingStudio();
   initDynamicIslandStudio();
@@ -250,6 +251,7 @@ function switchTab(tabId) {
     loadSocialHubConfig();
     loadRatingPromptConfig();
     loadAdmobConfig();
+    loadCloudStorageConfig();
   }
 }
 
@@ -5226,6 +5228,79 @@ const featureKeyMap = {
   feature_double_wallpaper: { id: 'flagDoubleWallpaper', name: 'Double Wallpaper', icon: '🖼️' },
   feature_wallpaper_changer: { id: 'flagWallpaperChanger', name: 'Auto Wallpaper Changer', icon: '⏱️' }
 };
+
+// CLOUD STORAGE (CLOUDINARY) MANAGEMENT
+async function loadCloudStorageConfig() {
+  try {
+    const res = await authFetch('/api/admin/cloud-storage/config');
+    const json = await res.json();
+    if (json.success && json.data) {
+      const data = json.data;
+      const cloudNameInput = document.getElementById('cfgCloudName');
+      const apiKeyInput = document.getElementById('cfgCloudApiKey');
+      const apiSecretInput = document.getElementById('cfgCloudApiSecret');
+      const statusBadge = document.getElementById('cloudStorageStatusBadge');
+
+      if (cloudNameInput) cloudNameInput.value = data.cloudName || '';
+      if (apiKeyInput) apiKeyInput.value = data.apiKey || '';
+      if (apiSecretInput) apiSecretInput.value = data.hasSecret ? '••••••••' : '';
+
+      if (statusBadge) {
+        if (data.isEnabled) {
+          statusBadge.className = 'badge-pill';
+          statusBadge.style.cssText = 'background:rgba(16, 185, 129, 0.2); color:#34d399; border:1px solid rgba(16, 185, 129, 0.4); font-size:11px; padding:2px 8px; font-weight:700;';
+          statusBadge.innerHTML = '🟢 Cloud Storage Active (Cloudinary)';
+        } else {
+          statusBadge.className = 'badge-pill';
+          statusBadge.style.cssText = 'background:rgba(245, 158, 11, 0.15); color:#fbbf24; border:1px solid rgba(245, 158, 11, 0.3); font-size:11px; padding:2px 8px;';
+          statusBadge.innerHTML = '⚠️ Ephemeral Local Storage';
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error loading cloud storage config:', err);
+  }
+}
+
+function initCloudStorageForm() {
+  const cloudForm = document.getElementById('cloudStorageConfigForm');
+  if (cloudForm && !cloudForm.dataset.initialized) {
+    cloudForm.dataset.initialized = 'true';
+    cloudForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('saveCloudStorageBtn');
+      const cloudName = document.getElementById('cfgCloudName')?.value.trim();
+      const apiKey = document.getElementById('cfgCloudApiKey')?.value.trim();
+      const apiSecret = document.getElementById('cfgCloudApiSecret')?.value.trim();
+
+      try {
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '⏳ Saving...';
+        }
+        const res = await authFetch('/api/admin/cloud-storage/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cloudName, apiKey, apiSecret })
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Cloud storage configuration saved!');
+          await loadCloudStorageConfig();
+        } else {
+          showToast('Error: ' + (json.error || 'Failed to save'));
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '💾 Save Cloud Storage';
+        }
+      }
+    });
+  }
+}
 
 let currentFeatureFlags = {};
 

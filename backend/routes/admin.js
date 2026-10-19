@@ -27,6 +27,12 @@ const {
   deleteLocalSnapshot
 } = require('../services/backupScheduler');
 
+const {
+  uploadToCloud,
+  getCloudConfig,
+  saveCloudConfig
+} = require('../services/cloudStorage');
+
 const JWT_SECRET = process.env.JWT_SECRET || 'rewall_secure_admin_jwt_secret_key_2026_x89';
 
 // Middleware to verify JWT Token for protected Admin routes
@@ -93,6 +99,22 @@ async function processImageToWebP(inputFilePath, baseId) {
 
   const thumbStat = fs.statSync(thumbFilePath);
   const fullStat = fs.statSync(fullFilePath);
+
+  // 3. Upload to Cloudinary if configured for permanent cloud hosting
+  try {
+    const cloudRes = await uploadToCloud(fullFilePath, 'wallpapers');
+    if (cloudRes && cloudRes.url) {
+      return {
+        thumbUrl: cloudRes.thumbUrl || `/uploads/${thumbFileName}`,
+        fullUrl: cloudRes.url,
+        originalBytes,
+        compressedBytes: fullStat.size + thumbStat.size,
+        isCloud: true
+      };
+    }
+  } catch (cloudErr) {
+    console.warn('Cloud storage sync notice:', cloudErr.message);
+  }
 
   return {
     thumbUrl: `/uploads/${thumbFileName}`,
@@ -1464,6 +1486,31 @@ router.post('/backup/config', verifyAdminToken, async (req, res) => {
   }
 });
 
+// GET /api/admin/cloud-storage/config
+router.get('/cloud-storage/config', verifyAdminToken, (req, res) => {
+  try {
+    const config = getCloudConfig();
+    res.json({ success: true, data: config });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/cloud-storage/config
+router.post('/cloud-storage/config', verifyAdminToken, (req, res) => {
+  try {
+    const { cloudName, apiKey, apiSecret, cloudinaryUrl } = req.body;
+    const updated = saveCloudConfig({ cloudName, apiKey, apiSecret, cloudinaryUrl });
+    res.json({
+      success: true,
+      message: '☁️ Cloudinary permanent storage settings saved!',
+      data: updated
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // GET /api/admin/backup/download (Direct Instant Download)
 router.get('/backup/download', async (req, res) => {
   try {
@@ -2062,13 +2109,31 @@ router.post('/charging-animations', verifyAdminToken, chargingUploadFields, asyn
 
     if (req.files) {
       if (req.files.animationFile && req.files.animationFile[0]) {
-        animUrl = `/uploads/${req.files.animationFile[0].filename}`;
+        const filePath = req.files.animationFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          animUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.animationFile[0].filename}`;
+        } catch (_) {
+          animUrl = `/uploads/${req.files.animationFile[0].filename}`;
+        }
       }
       if (req.files.previewFile && req.files.previewFile[0]) {
-        prevUrl = `/uploads/${req.files.previewFile[0].filename}`;
+        const filePath = req.files.previewFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          prevUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.previewFile[0].filename}`;
+        } catch (_) {
+          prevUrl = `/uploads/${req.files.previewFile[0].filename}`;
+        }
       }
       if (req.files.soundFile && req.files.soundFile[0]) {
-        sndUrl = `/uploads/${req.files.soundFile[0].filename}`;
+        const filePath = req.files.soundFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          sndUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.soundFile[0].filename}`;
+        } catch (_) {
+          sndUrl = `/uploads/${req.files.soundFile[0].filename}`;
+        }
       }
     }
 
@@ -3382,10 +3447,22 @@ router.post('/duo/wallpapers', verifyAdminToken, upload.fields([{ name: 'lockIma
     let homeImageUrl = req.body.homeImageUrl;
 
     if (req.files && req.files['lockImage'] && req.files['lockImage'][0]) {
-      lockImageUrl = `/uploads/${path.basename(req.files['lockImage'][0].path)}`;
+      const filePath = req.files['lockImage'][0].path;
+      try {
+        const cloudRes = await uploadToCloud(filePath, 'duo');
+        lockImageUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${path.basename(filePath)}`;
+      } catch (_) {
+        lockImageUrl = `/uploads/${path.basename(filePath)}`;
+      }
     }
     if (req.files && req.files['homeImage'] && req.files['homeImage'][0]) {
-      homeImageUrl = `/uploads/${path.basename(req.files['homeImage'][0].path)}`;
+      const filePath = req.files['homeImage'][0].path;
+      try {
+        const cloudRes = await uploadToCloud(filePath, 'duo');
+        homeImageUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${path.basename(filePath)}`;
+      } catch (_) {
+        homeImageUrl = `/uploads/${path.basename(filePath)}`;
+      }
     }
 
     if (!title || !title.trim()) {
