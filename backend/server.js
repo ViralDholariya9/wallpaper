@@ -39,6 +39,19 @@ app.all(['/health', '/ping'], (req, res) => {
   res.status(200).set('Content-Type', 'text/plain').send('OK');
 });
 
+// Global JSON error handling middleware (prevents raw HTML error responses)
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  const status = err.status || err.statusCode || (err.name === 'MulterError' ? 400 : 500);
+  res.status(status).json({
+    success: false,
+    error: err.message || 'Internal server error'
+  });
+});
+
 // Helper to find local IPv4 address
 function getLocalIP() {
   const interfaces = os.networkInterfaces();

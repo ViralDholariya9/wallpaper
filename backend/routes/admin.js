@@ -1089,12 +1089,12 @@ router.post('/admob', verifyAdminToken, async (req, res) => {
       ['admob_rewarded_interval', String(parseInt(rewardedInterval, 10) || 3)],
       ['admob_interstitial_interval', String(parseInt(interstitialInterval, 10) || 3)],
       ['admob_native_interval', String(parseInt(nativeInterval, 10) || 6)],
-      ['admob_app_id', appId || 'ca-app-pub-3940256099942544~3347511713'],
-      ['admob_banner_id', bannerId || 'ca-app-pub-3940256099942544/6300978111'],
-      ['admob_interstitial_id', interstitialId || 'ca-app-pub-3940256099942544/1033173712'],
-      ['admob_rewarded_id', rewardedId || 'ca-app-pub-3940256099942544/5224354917'],
-      ['admob_app_open_id', appOpenId || 'ca-app-pub-3940256099942544/9257395921'],
-      ['admob_native_id', nativeId || 'ca-app-pub-3940256099942544/2247696110'],
+      ['admob_app_id', appId || 'ca-app-pub-5714967600447435~7618502037'],
+      ['admob_banner_id', bannerId || 'ca-app-pub-5714967600447435/8240575708'],
+      ['admob_interstitial_id', interstitialId || 'ca-app-pub-5714967600447435/6796374950'],
+      ['admob_rewarded_id', rewardedId || 'ca-app-pub-5714967600447435/5483293280'],
+      ['admob_app_open_id', appOpenId || 'ca-app-pub-5714967600447435/3163331832'],
+      ['admob_native_id', nativeId || 'ca-app-pub-5714967600447435/7610018319'],
       ['admob_is_test_mode', isTestMode ? 'true' : 'false']
     ];
 
@@ -1310,130 +1310,6 @@ router.post('/devices/:id/ping', verifyAdminToken, async (req, res) => {
   }
 });
 
-// ==========================================
-// 🖼️ HERO BANNERS MANAGEMENT ROUTES
-// ==========================================
-
-// GET /api/admin/banners
-router.get('/banners', verifyAdminToken, async (req, res) => {
-  try {
-    const banners = await db.allAsync(
-      'SELECT * FROM hero_banners ORDER BY sortOrder ASC, createdAt DESC'
-    );
-    res.json({ success: true, count: banners.length, data: banners });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// POST /api/admin/banners (Create new banner with optional upload)
-router.post('/banners', verifyAdminToken, upload.single('image'), async (req, res) => {
-  try {
-    const { title, subtitle, badgeText, actionType, actionTarget, sortOrder, isActive } = req.body;
-    let imageUrl = req.body.imageUrl || '';
-
-    if (!title || !title.trim()) {
-      return res.status(400).json({ success: false, error: 'Banner title is required' });
-    }
-
-    if (req.file) {
-      const baseId = `${Date.now()}_${Math.round(Math.random() * 1e6)}`;
-      const result = await processImageToWebP(req.file.path, baseId);
-      imageUrl = result.fullUrl;
-      try { fs.unlinkSync(req.file.path); } catch (_) {}
-    }
-
-    if (!imageUrl) {
-      return res.status(400).json({ success: false, error: 'Banner image or image URL is required' });
-    }
-
-    const id = `b_${Date.now()}`;
-    const createdAt = Date.now();
-    const order = parseInt(sortOrder || '0', 10);
-    const active = isActive === 'false' || isActive === 0 || isActive === '0' ? 0 : 1;
-
-    await db.runAsync(
-      `INSERT INTO hero_banners (id, title, subtitle, badgeText, imageUrl, actionType, actionTarget, sortOrder, isActive, createdAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, title.trim(), subtitle || '', badgeText || '', imageUrl, actionType || 'category', actionTarget || '', order, active, createdAt]
-    );
-
-    const banner = await db.getAsync('SELECT * FROM hero_banners WHERE id = ?', [id]);
-    res.json({ success: true, message: 'Hero banner created successfully', data: banner });
-  } catch (err) {
-    console.error('Create banner error:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// PUT /api/admin/banners/:id (Update banner)
-router.put('/banners/:id', verifyAdminToken, upload.single('image'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const existing = await db.getAsync('SELECT * FROM hero_banners WHERE id = ?', [id]);
-    if (!existing) {
-      return res.status(404).json({ success: false, error: 'Banner not found' });
-    }
-
-    const { title, subtitle, badgeText, actionType, actionTarget, sortOrder, isActive } = req.body;
-    let imageUrl = req.body.imageUrl || existing.imageUrl;
-
-    if (req.file) {
-      const baseId = `${Date.now()}_${Math.round(Math.random() * 1e6)}`;
-      const result = await processImageToWebP(req.file.path, baseId);
-      imageUrl = result.fullUrl;
-      try { fs.unlinkSync(req.file.path); } catch (_) {}
-    }
-
-    const updatedTitle = title !== undefined ? title.trim() : existing.title;
-    const updatedSub = subtitle !== undefined ? subtitle : existing.subtitle;
-    const updatedBadge = badgeText !== undefined ? badgeText : existing.badgeText;
-    const updatedActionType = actionType !== undefined ? actionType : existing.actionType;
-    const updatedActionTarget = actionTarget !== undefined ? actionTarget : existing.actionTarget;
-    const updatedOrder = sortOrder !== undefined ? parseInt(sortOrder, 10) : existing.sortOrder;
-    const updatedActive = isActive !== undefined ? (isActive === 'true' || isActive === 1 || isActive === true ? 1 : 0) : existing.isActive;
-
-    await db.runAsync(
-      `UPDATE hero_banners
-       SET title = ?, subtitle = ?, badgeText = ?, imageUrl = ?, actionType = ?, actionTarget = ?, sortOrder = ?, isActive = ?
-       WHERE id = ?`,
-      [updatedTitle, updatedSub, updatedBadge, imageUrl, updatedActionType, updatedActionTarget, updatedOrder, updatedActive, id]
-    );
-
-    const updated = await db.getAsync('SELECT * FROM hero_banners WHERE id = ?', [id]);
-    res.json({ success: true, message: 'Banner updated successfully', data: updated });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// PATCH /api/admin/banners/:id/toggle (Quick toggle active/inactive)
-router.patch('/banners/:id/toggle', verifyAdminToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const existing = await db.getAsync('SELECT * FROM hero_banners WHERE id = ?', [id]);
-    if (!existing) {
-      return res.status(404).json({ success: false, error: 'Banner not found' });
-    }
-
-    const newActive = existing.isActive ? 0 : 1;
-    await db.runAsync('UPDATE hero_banners SET isActive = ? WHERE id = ?', [newActive, id]);
-    res.json({ success: true, message: `Banner ${newActive ? 'activated' : 'paused'}`, isActive: newActive });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-// DELETE /api/admin/banners/:id
-router.delete('/banners/:id', verifyAdminToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    await db.runAsync('DELETE FROM hero_banners WHERE id = ?', [id]);
-    res.json({ success: true, message: 'Banner deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
 
 // ==========================================
 // 1-CLICK AUTO BACKUP & 1-SEC RESTORE ROUTES
@@ -1727,6 +1603,27 @@ router.post('/backup/restore', verifyAdminToken, upload.single('backupFile'), as
 // 🖼️ HERO BANNERS ADMIN MANAGEMENT
 // ==========================================
 
+// Helper middleware for robust banner uploads (supports both 'bannerImage' and 'image' field names)
+const bannerUpload = (req, res, next) => {
+  upload.fields([
+    { name: 'bannerImage', maxCount: 1 },
+    { name: 'image', maxCount: 1 }
+  ])(req, res, (err) => {
+    if (err) {
+      console.error('Banner upload error:', err);
+      return res.status(400).json({ success: false, error: err.message });
+    }
+    if (req.files) {
+      if (req.files['bannerImage'] && req.files['bannerImage'][0]) {
+        req.file = req.files['bannerImage'][0];
+      } else if (req.files['image'] && req.files['image'][0]) {
+        req.file = req.files['image'][0];
+      }
+    }
+    next();
+  });
+};
+
 // GET /api/admin/banners
 router.get('/banners', verifyAdminToken, async (req, res) => {
   try {
@@ -1757,7 +1654,7 @@ router.get('/banners', verifyAdminToken, async (req, res) => {
 });
 
 // POST /api/admin/banners (Create new banner)
-router.post('/banners', verifyAdminToken, upload.single('bannerImage'), async (req, res) => {
+router.post('/banners', verifyAdminToken, bannerUpload, async (req, res) => {
   try {
     const { title, subtitle, badgeText, actionType, actionTarget, sortOrder, isActive } = req.body;
     let imageUrl = req.body.imageUrl;
@@ -1820,7 +1717,7 @@ router.post('/banners', verifyAdminToken, upload.single('bannerImage'), async (r
 });
 
 // PUT /api/admin/banners/:id (Update banner)
-router.put('/banners/:id', verifyAdminToken, upload.single('bannerImage'), async (req, res) => {
+router.put('/banners/:id', verifyAdminToken, bannerUpload, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, subtitle, badgeText, actionType, actionTarget, sortOrder, isActive } = req.body;

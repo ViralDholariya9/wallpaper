@@ -309,12 +309,12 @@ router.get('/app-config', async (req, res) => {
 
         // Social Media, Legal Policy & Support Hub
         legalAndSupport: {
-          privacyPolicyUrl: configMap['privacy_policy_url'] || 'https://rewall-3d.web.app/privacy-policy',
+          privacyPolicyUrl: configMap['privacy_policy_url'] || 'https://warrantifyai.blogspot.com/2026/10/privacy-policy-for-3d-parallax-live.html',
           termsUrl: configMap['terms_of_service_url'] || 'https://rewall-3d.web.app/terms',
           instagramUrl: configMap['instagram_url'] || 'https://instagram.com/rewall.3d',
           telegramUrl: configMap['telegram_url'] || 'https://t.me/rewall_wallpapers',
           whatsappNumber: configMap['whatsapp_support_number'] || '+919876543210',
-          supportEmail: configMap['support_email'] || 'support@rewall.app'
+          supportEmail: configMap['support_email'] || 'omvagmineprivatelimited@gmail.com'
         },
 
         // Smart In-App Rating & Review Trigger (Play Store Growth)
@@ -335,13 +335,13 @@ router.get('/app-config', async (req, res) => {
           rewardedInterval: parseInt(configMap['admob_rewarded_interval'] || '3', 10),
           interstitialInterval: parseInt(configMap['admob_interstitial_interval'] || '3', 10),
           nativeInterval: parseInt(configMap['admob_native_interval'] || '6', 10),
-          appId: configMap['admob_app_id'] || 'ca-app-pub-3940256099942544~3347511713',
-          bannerId: configMap['admob_banner_id'] || 'ca-app-pub-3940256099942544/6300978111',
-          interstitialId: configMap['admob_interstitial_id'] || 'ca-app-pub-3940256099942544/1033173712',
-          rewardedId: configMap['admob_rewarded_id'] || 'ca-app-pub-3940256099942544/5224354917',
-          appOpenId: configMap['admob_app_open_id'] || 'ca-app-pub-3940256099942544/9257395921',
-          nativeId: configMap['admob_native_id'] || 'ca-app-pub-3940256099942544/2247696110',
-          isTestMode: configMap['admob_is_test_mode'] !== 'false'
+          appId: configMap['admob_app_id'] || 'ca-app-pub-5714967600447435~7618502037',
+          bannerId: configMap['admob_banner_id'] || 'ca-app-pub-5714967600447435/8240575708',
+          interstitialId: configMap['admob_interstitial_id'] || 'ca-app-pub-5714967600447435/6796374950',
+          rewardedId: configMap['admob_rewarded_id'] || 'ca-app-pub-5714967600447435/5483293280',
+          appOpenId: configMap['admob_app_open_id'] || 'ca-app-pub-5714967600447435/3163331832',
+          nativeId: configMap['admob_native_id'] || 'ca-app-pub-5714967600447435/7610018319',
+          isTestMode: configMap['admob_is_test_mode'] === 'true'
         },
 
         // System state (backward-compatible top-level properties)
@@ -547,41 +547,6 @@ router.post('/device/register-token', async (req, res) => {
   }
 });
 
-// ==========================================
-// 🖼️ HERO BANNERS CAROUSEL (Public API)
-// ==========================================
-// GET /api/banners - returns active banners ordered by sortOrder ASC
-router.get('/banners', async (req, res) => {
-  try {
-    const banners = await db.allAsync(
-      `SELECT id, title, subtitle, badgeText, imageUrl, actionType, actionTarget, sortOrder, isActive, createdAt
-       FROM hero_banners
-       WHERE isActive = 1
-       ORDER BY sortOrder ASC, createdAt DESC`
-    );
-
-    const formatted = (banners || []).map(b => ({
-      id: b.id,
-      title: b.title,
-      subtitle: b.subtitle || '',
-      badgeText: b.badgeText || '',
-      imageUrl: b.imageUrl,
-      actionType: b.actionType || 'category',
-      actionTarget: b.actionTarget || '',
-      sortOrder: Number(b.sortOrder || 0),
-      isActive: Boolean(b.isActive),
-      createdAt: Number(b.createdAt)
-    }));
-
-    res.json({
-      success: true,
-      data: formatted
-    });
-  } catch (err) {
-    console.error('Error fetching hero banners:', err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
 
 // ==========================================
 // 🔥 TRENDING SEARCH KEYWORDS / TAGS (Public API)

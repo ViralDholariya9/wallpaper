@@ -119,7 +119,7 @@ async function pushLiveTest(type, id, targetDeviceId = null) {
   }
 
   const serial = device.id;
-  const pkg = 'com.omvagmine.wallpaper';
+  const pkg = 'com.omvagmine.parallaxlivewallpaperrewall';
 
   // Step 1: Wake up device display and dismiss keyguard
   try {
@@ -142,6 +142,9 @@ async function pushLiveTest(type, id, targetDeviceId = null) {
   } else if (type === 'aod') {
     friendlyType = 'AOD Clock Face';
     amCmd = `"${adb}" -s ${serial} shell am start -n ${pkg}/com.parallax.wallpaper.aod.AODActivity -a com.parallax.wallpaper.ACTION_LIVE_TEST --es preview_type aod --es clock_id "${id}"`;
+  } else if (type === 'charging') {
+    friendlyType = 'Charging Animation';
+    amCmd = `"${adb}" -s ${serial} shell am start -n ${pkg}/com.parallax.wallpaper.charging.ChargingActivity -a com.parallax.wallpaper.ACTION_LIVE_TEST --es preview_type charging --es anim_id "${id}"`;
   } else {
     throw new Error(`Unsupported live test preview type: ${type}`);
   }

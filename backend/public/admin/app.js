@@ -4687,12 +4687,13 @@ function describeAction(type, target) {
 window.toggleBannerActive = async function(id) {
   try {
     const res = await authFetch(`/api/admin/banners/${id}/toggle`, { method: 'PATCH' });
-    const json = await res.json();
-    if (json.success) {
+    const cType = res.headers.get('content-type') || '';
+    const json = cType.includes('application/json') ? await res.json() : null;
+    if (json && json.success) {
       showToast(json.message || 'Banner status updated');
       await loadBanners();
     } else {
-      showToast(json.error || 'Failed to update banner');
+      showToast(json?.error || `Failed to update banner (${res.status})`);
     }
   } catch (err) {
     showToast('Error: ' + err.message);
@@ -4712,12 +4713,13 @@ window.deleteBanner = async function(id) {
 
   try {
     const res = await authFetch(`/api/admin/banners/${encodeURIComponent(id)}`, { method: 'DELETE' });
-    const json = await res.json();
-    if (json.success) {
+    const cType = res.headers.get('content-type') || '';
+    const json = cType.includes('application/json') ? await res.json() : null;
+    if (json && json.success) {
       showToast('Hero banner deleted successfully');
       await loadBanners();
     } else {
-      showToast(json.error || 'Failed to delete banner');
+      showToast(json?.error || `Failed to delete banner (${res.status})`);
     }
   } catch (err) {
     showToast('Error: ' + err.message);
@@ -4975,7 +4977,15 @@ function initHeroBanners() {
           body: formData
         });
 
-        const json = await res.json();
+        const cType = res.headers.get('content-type') || '';
+        let json;
+        if (cType.includes('application/json')) {
+          json = await res.json();
+        } else {
+          const rawText = await res.text();
+          throw new Error(`Server returned ${res.status}: ${res.statusText || 'Unexpected server error'}`);
+        }
+
         if (json.success) {
           showToast(bannerId ? 'Hero banner updated!' : 'Hero banner created!');
           modal.classList.remove('active');
