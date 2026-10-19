@@ -68,6 +68,15 @@ function getLocalIP() {
 // Start Server
 async function startServer() {
   await initSchema();
+
+  // Auto-restore persistent database from Cloudinary if available
+  try {
+    const { autoRestoreDatabaseFromCloud } = require('./services/cloudStorage');
+    await autoRestoreDatabaseFromCloud();
+  } catch (err) {
+    console.warn('⚠️ Cloud database auto-restore check skipped:', err.message);
+  }
+
   initBackupScheduler();
   app.listen(PORT, '0.0.0.0', () => {
     const ip = getLocalIP();

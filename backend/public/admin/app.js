@@ -5240,10 +5240,16 @@ async function loadCloudStorageConfig() {
       const apiKeyInput = document.getElementById('cfgCloudApiKey');
       const apiSecretInput = document.getElementById('cfgCloudApiSecret');
       const statusBadge = document.getElementById('cloudStorageStatusBadge');
+      const lastSyncEl = document.getElementById('cloudDbLastSync');
 
       if (cloudNameInput) cloudNameInput.value = data.cloudName || '';
       if (apiKeyInput) apiKeyInput.value = data.apiKey || '';
       if (apiSecretInput) apiSecretInput.value = data.hasSecret ? '••••••••' : '';
+
+      if (lastSyncEl && data.lastSyncedAt) {
+        const dt = new Date(data.lastSyncedAt);
+        lastSyncEl.textContent = `(Last Synced: ${dt.toLocaleTimeString()})`;
+      }
 
       if (statusBadge) {
         if (data.isEnabled) {
@@ -5297,6 +5303,57 @@ function initCloudStorageForm() {
           btn.disabled = false;
           btn.innerHTML = '💾 Save Cloud Storage';
         }
+      }
+    });
+  }
+
+  // Backup DB to Cloud Now Button
+  const syncBtn = document.getElementById('syncCloudDbBtn');
+  if (syncBtn && !syncBtn.dataset.initialized) {
+    syncBtn.dataset.initialized = 'true';
+    syncBtn.addEventListener('click', async () => {
+      syncBtn.disabled = true;
+      syncBtn.innerHTML = '⏳ Syncing DB...';
+      try {
+        const res = await authFetch('/api/admin/cloud-storage/sync-db', { method: 'POST' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('☁️ Database successfully backed up to Cloudinary!');
+          await loadCloudStorageConfig();
+        } else {
+          showToast('Error: ' + (json.error || 'Sync failed'));
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        syncBtn.disabled = false;
+        syncBtn.innerHTML = '☁️ Backup DB to Cloud Now';
+      }
+    });
+  }
+
+  // Restore DB from Cloud Button
+  const restoreBtn = document.getElementById('restoreCloudDbBtn');
+  if (restoreBtn && !restoreBtn.dataset.initialized) {
+    restoreBtn.dataset.initialized = 'true';
+    restoreBtn.addEventListener('click', async () => {
+      if (!confirm('Are you sure you want to restore the latest database from Cloudinary? This will refresh all wallpapers, categories, and animations from your cloud backup.')) return;
+      restoreBtn.disabled = true;
+      restoreBtn.innerHTML = '⏳ Restoring DB...';
+      try {
+        const res = await authFetch('/api/admin/cloud-storage/restore-db', { method: 'POST' });
+        const json = await res.json();
+        if (json.success) {
+          showToast(json.message || 'Database restored from Cloudinary!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          showToast('Error: ' + (json.error || 'Restore failed'));
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        restoreBtn.disabled = false;
+        restoreBtn.innerHTML = '📥 Restore DB from Cloud';
       }
     });
   }

@@ -30,7 +30,10 @@ const {
 const {
   uploadToCloud,
   getCloudConfig,
-  saveCloudConfig
+  saveCloudConfig,
+  syncDatabaseToCloud,
+  triggerCloudDatabaseSync,
+  autoRestoreDatabaseFromCloud
 } = require('../services/cloudStorage');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'rewall_secure_admin_jwt_secret_key_2026_x89';
@@ -357,6 +360,7 @@ router.post('/bulk-upload', verifyAdminToken, upload.array('files', 100), async 
       ? Math.max(0, Math.round((1 - totalCompressedBytes / totalOriginalBytes) * 100))
       : 0;
 
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       count: createdWallpapers.length,
@@ -513,6 +517,7 @@ router.post('/wallpapers', verifyAdminToken, async (req, res) => {
       }
     }
 
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: 'Wallpaper created successfully', id: finalId });
   } catch (err) {
     console.error('Error creating wallpaper:', err);
@@ -562,6 +567,7 @@ router.put('/wallpapers/:id', verifyAdminToken, async (req, res) => {
       }
     }
 
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: 'Wallpaper updated successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -592,6 +598,7 @@ router.put('/wallpapers/:id/layers', verifyAdminToken, async (req, res) => {
       await db.runAsync('UPDATE wallpapers SET isParallax = 1 WHERE id = ?', [id]);
     }
 
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: '3D Parallax layers updated successfully' });
   } catch (err) {
     console.error('Error updating wallpaper layers:', err);
@@ -604,6 +611,7 @@ router.delete('/wallpapers/:id', verifyAdminToken, async (req, res) => {
   try {
     await db.runAsync('DELETE FROM wallpaper_layers WHERE wallpaperId = ?', [req.params.id]);
     await db.runAsync('DELETE FROM wallpapers WHERE id = ?', [req.params.id]);
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: 'Wallpaper deleted successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -626,6 +634,7 @@ router.post('/wallpapers/bulk-delete', verifyAdminToken, async (req, res) => {
     await db.runAsync(`DELETE FROM wallpaper_layers WHERE wallpaperId IN (${placeholders})`, ids);
     const result = await db.runAsync(`DELETE FROM wallpapers WHERE id IN (${placeholders})`, ids);
 
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       count: result.changes || ids.length,
@@ -1497,15 +1506,51 @@ router.get('/cloud-storage/config', verifyAdminToken, (req, res) => {
 });
 
 // POST /api/admin/cloud-storage/config
-router.post('/cloud-storage/config', verifyAdminToken, (req, res) => {
+router.post('/cloud-storage/config', verifyAdminToken, async (req, res) => {
   try {
     const { cloudName, apiKey, apiSecret, cloudinaryUrl } = req.body;
     const updated = saveCloudConfig({ cloudName, apiKey, apiSecret, cloudinaryUrl });
+    // Trigger immediate database sync if enabled
+    if (updated.isEnabled) {
+      syncDatabaseToCloud().catch(err => console.error('Cloud DB sync on config save error:', err));
+    }
     res.json({
       success: true,
-      message: '☁️ Cloudinary permanent storage settings saved!',
+      message: '☁️ Cloudinary permanent storage settings saved and database synced!',
       data: updated
     });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/cloud-storage/sync-db (Manually trigger instant DB sync to Cloudinary)
+router.post('/cloud-storage/sync-db', verifyAdminToken, async (req, res) => {
+  try {
+    const result = await syncDatabaseToCloud();
+    if (result.success) {
+      res.json({ success: true, message: '☁️ Database successfully backed up to Cloudinary!', data: result.data });
+    } else {
+      res.status(400).json({ success: false, error: result.reason || result.error || 'Sync failed' });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/cloud-storage/restore-db (Manually force restore DB from Cloudinary)
+router.post('/cloud-storage/restore-db', verifyAdminToken, async (req, res) => {
+  try {
+    const result = await autoRestoreDatabaseFromCloud(true);
+    if (result.restored) {
+      res.json({
+        success: true,
+        message: `📥 Database restored from Cloudinary! (${result.cloudTotal} total items)`,
+        data: result
+      });
+    } else {
+      res.status(400).json({ success: false, error: result.reason || result.error || 'Restore failed' });
+    }
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -2182,6 +2227,7 @@ router.post('/charging-animations', verifyAdminToken, chargingUploadFields, asyn
     );
 
     const created = await db.getAsync('SELECT * FROM charging_animations WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       message: 'Charging animation published successfully!',
@@ -2221,13 +2267,31 @@ router.put('/charging-animations/:id', verifyAdminToken, chargingUploadFields, a
 
     if (req.files) {
       if (req.files.animationFile && req.files.animationFile[0]) {
-        animUrl = `/uploads/${req.files.animationFile[0].filename}`;
+        const filePath = req.files.animationFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          animUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.animationFile[0].filename}`;
+        } catch (_) {
+          animUrl = `/uploads/${req.files.animationFile[0].filename}`;
+        }
       }
       if (req.files.previewFile && req.files.previewFile[0]) {
-        prevUrl = `/uploads/${req.files.previewFile[0].filename}`;
+        const filePath = req.files.previewFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          prevUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.previewFile[0].filename}`;
+        } catch (_) {
+          prevUrl = `/uploads/${req.files.previewFile[0].filename}`;
+        }
       }
       if (req.files.soundFile && req.files.soundFile[0]) {
-        sndUrl = `/uploads/${req.files.soundFile[0].filename}`;
+        const filePath = req.files.soundFile[0].path;
+        try {
+          const cloudRes = await uploadToCloud(filePath, 'charging');
+          sndUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${req.files.soundFile[0].filename}`;
+        } catch (_) {
+          sndUrl = `/uploads/${req.files.soundFile[0].filename}`;
+        }
       }
     }
 
@@ -2259,6 +2323,7 @@ router.put('/charging-animations/:id', verifyAdminToken, chargingUploadFields, a
     );
 
     const updated = await db.getAsync('SELECT * FROM charging_animations WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       message: 'Charging animation updated successfully!',
@@ -2281,6 +2346,7 @@ router.patch('/charging-animations/:id/toggle', verifyAdminToken, async (req, re
 
     const newStatus = item.isActive ? 0 : 1;
     await db.runAsync('UPDATE charging_animations SET isActive = ? WHERE id = ?', [newStatus, id]);
+    triggerCloudDatabaseSync();
 
     res.json({
       success: true,
@@ -2303,6 +2369,7 @@ router.delete('/charging-animations/:id', verifyAdminToken, async (req, res) => 
     }
 
     await db.runAsync('DELETE FROM charging_animations WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: 'Charging animation deleted successfully' });
   } catch (err) {
     console.error('Error deleting charging animation:', err);
@@ -3501,6 +3568,7 @@ router.post('/duo/wallpapers', verifyAdminToken, upload.fields([{ name: 'lockIma
     ]);
 
     const created = await db.getAsync('SELECT * FROM duo_wallpapers WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       message: 'Duo wallpaper pair created successfully',
@@ -3526,10 +3594,22 @@ router.put('/duo/wallpapers/:id', verifyAdminToken, upload.fields([{ name: 'lock
     let homeImageUrl = req.body.homeImageUrl || existing.homeImageUrl;
 
     if (req.files && req.files['lockImage'] && req.files['lockImage'][0]) {
-      lockImageUrl = `/uploads/${path.basename(req.files['lockImage'][0].path)}`;
+      const filePath = req.files['lockImage'][0].path;
+      try {
+        const cloudRes = await uploadToCloud(filePath, 'duo');
+        lockImageUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${path.basename(filePath)}`;
+      } catch (_) {
+        lockImageUrl = `/uploads/${path.basename(filePath)}`;
+      }
     }
     if (req.files && req.files['homeImage'] && req.files['homeImage'][0]) {
-      homeImageUrl = `/uploads/${path.basename(req.files['homeImage'][0].path)}`;
+      const filePath = req.files['homeImage'][0].path;
+      try {
+        const cloudRes = await uploadToCloud(filePath, 'duo');
+        homeImageUrl = (cloudRes && cloudRes.url) ? cloudRes.url : `/uploads/${path.basename(filePath)}`;
+      } catch (_) {
+        homeImageUrl = `/uploads/${path.basename(filePath)}`;
+      }
     }
 
     await db.runAsync(`
@@ -3558,6 +3638,7 @@ router.put('/duo/wallpapers/:id', verifyAdminToken, upload.fields([{ name: 'lock
     ]);
 
     const updated = await db.getAsync('SELECT * FROM duo_wallpapers WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       message: 'Duo wallpaper pair updated successfully',
@@ -3580,7 +3661,7 @@ router.patch('/duo/wallpapers/:id/toggle', verifyAdminToken, async (req, res) =>
 
     const nextState = item.isActive === 1 ? 0 : 1;
     await db.runAsync('UPDATE duo_wallpapers SET isActive = ? WHERE id = ?', [nextState, id]);
-
+    triggerCloudDatabaseSync();
     res.json({
       success: true,
       isActive: Boolean(nextState),
@@ -3602,6 +3683,7 @@ router.delete('/duo/wallpapers/:id', verifyAdminToken, async (req, res) => {
     }
 
     await db.runAsync('DELETE FROM duo_wallpapers WHERE id = ?', [id]);
+    triggerCloudDatabaseSync();
     res.json({ success: true, message: 'Duo wallpaper pair deleted successfully' });
   } catch (err) {
     console.error('Error deleting duo pair:', err);
