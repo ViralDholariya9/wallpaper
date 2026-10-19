@@ -60,8 +60,8 @@ router.get('/wallpapers', async (req, res) => {
     const params = [];
 
     if (category && category !== 'ALL') {
-      whereClauses.push('category = ?');
-      params.push(category);
+      whereClauses.push('(category = ? OR category = (SELECT id FROM categories WHERE name = ? COLLATE NOCASE) OR category = (SELECT name FROM categories WHERE id = ? COLLATE NOCASE))');
+      params.push(category, category, category);
     }
 
     if (search && search.trim() !== '') {
@@ -150,7 +150,12 @@ router.get('/categories', async (req, res) => {
     const categories = await db.allAsync(`
       SELECT c.*, COUNT(w.id) as count 
       FROM categories c 
-      LEFT JOIN wallpapers w ON w.category = c.id 
+      LEFT JOIN wallpapers w ON (
+        w.category = c.id 
+        OR w.category = c.name 
+        OR LOWER(w.category) = LOWER(c.name) 
+        OR LOWER(w.category) = LOWER(c.id)
+      )
       GROUP BY c.id 
       ORDER BY c.name ASC
     `);

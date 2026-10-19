@@ -878,7 +878,7 @@ function populateCategoryDropdowns() {
   const batchCatSelect = document.getElementById('batchCategorySelect');
   if (batchCatSelect) {
     batchCatSelect.innerHTML = '<option value="">Move Category...</option>' +
-      allCategories.map(c => `<option value="${c.name}">📁 ${c.name}</option>`).join('');
+      allCategories.map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
   }
 }
 
@@ -928,9 +928,12 @@ function renderWallpapersTable() {
   const catVal = document.getElementById('wallCategoryFilter').value;
   const typeVal = document.getElementById('wallTypeFilter').value;
 
+  const catObj = allCategories.find(c => c.id === catVal || c.name === catVal);
   currentFilteredWallpapers = allWallpapers.filter(w => {
     const matchesSearch = w.title.toLowerCase().includes(searchVal) || w.id.toLowerCase().includes(searchVal);
-    const matchesCat = catVal === 'ALL' || w.category === catVal;
+    const matchesCat = catVal === 'ALL' || 
+      w.category === catVal || 
+      (catObj && (w.category === catObj.id || w.category === catObj.name || (w.category && w.category.toLowerCase() === catObj.name.toLowerCase())));
     const matchesType = typeVal === 'ALL' ||
       (typeVal === 'PARALLAX' && w.isParallax) ||
       (typeVal === 'TWO_D' && !w.isParallax);
